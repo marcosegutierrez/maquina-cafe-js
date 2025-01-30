@@ -1,0 +1,16 @@
+{
+  "name": "maquina-cafe",
+  "version": "1.0.0",
+  "description": "proyecto maquina de cafe creado en javascript",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --watch src/app.js"
+  },
+  "author": "marcosegutierrez",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1"
+  }
+}
