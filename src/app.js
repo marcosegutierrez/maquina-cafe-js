@@ -1,7 +1,8 @@
 import express from 'express';
 import router from './routes/index.js';
 import handlebars from 'express-handlebars';
-import { __dirname } from './utils.js'
+import { __dirname } from './utils.js';
+import { initMongoDB } from './persistence/mongodb/connection.js';
 
 const app = express();
 const PORT = 8080;
@@ -28,5 +29,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', router);
+
+initMongoDB();
 
 app.listen(PORT, () => console.log(`Server Ok on port ${PORT}`));
