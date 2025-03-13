@@ -15,7 +15,9 @@ router.post('/orders', async (req, res) => {
         const order = await OrderMng.create(req.body);
         console.log('order:', order)
         return res.status(200).json({
-            body: req.body
+            drink: order.drink,
+            sugar: `${order.sugar} tablespoons`,
+            date: order.timestampFormatted,
         })
     } catch (error) {
         
