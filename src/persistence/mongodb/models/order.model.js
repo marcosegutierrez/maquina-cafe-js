@@ -26,7 +26,7 @@ OrderSchema.virtual('timestampFormatted').get(function() {
       minute: '2-digit',
       //second: '2-digit',
       hour12: false
-    }).replace(',', '').replaceAll('/', '-') + 'Hs';
+    }).replace(',', '').replaceAll('/', '-') + ' hs';
   });
 
 // Habilitar los campos virtuales en el JSON de salida
