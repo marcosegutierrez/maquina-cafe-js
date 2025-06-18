@@ -25,9 +25,8 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
-    res.send(`Welcome to the Coffee Machine!
-        <br>
-        Go to /drinks`);
+    // Redirección a página principal
+    res.redirect('/drinks');
 });
 
 app.use('/', router);
