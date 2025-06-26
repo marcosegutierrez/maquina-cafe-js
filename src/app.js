@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './routes/index.js';
+import router from './routes/index.route.js';
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { initMongoDB } from './persistence/mongodb/connection.js';
