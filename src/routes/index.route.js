@@ -1,7 +1,5 @@
 import { Router } from "express";
-import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
-
-const OrderMng = new OrderManagerMongo();
+import * as controllers from "../controllers/index.controller.js";
 
 const router = Router();
 
@@ -14,38 +12,8 @@ router.get('/search-order', (req, res) => {
 })
 
 //POST
-router.post('/orders', async (req, res) => {
-    try {
-        const order = await OrderMng.create(req.body);
-        console.log('order:', order)
+router.post('/orders', controllers.orders);
 
-        const orderData = {
-            drink: order.drink,
-            sugar: `${order.sugar} cucharadas`,
-            date: order.timestampFormatted,
-            id: order.id
-          };
-          
-          res.render('order', orderData);
-    } catch (error) {
-        console.log(error);
-    }
-})
-
-router.post('/order-found', async (req, res) => {
-    try {
-        const order = await OrderMng.getById(req.body.search_order);
-        const orderData = {
-            drink: order.drink,
-            sugar: `${order.sugar} cucharadas`,
-            date: order.timestampFormatted,
-            id: order.id
-          };
-          
-          res.render('order-found', orderData);
-    } catch (error) {
-        console.log(error);
-    }
-})
+router.post('/order-found', controllers.orderFound);
 
 export default router;
