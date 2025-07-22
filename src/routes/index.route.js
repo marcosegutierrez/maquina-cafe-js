@@ -11,6 +11,10 @@ router.get('/search-order', (req, res) => {
     res.render('search-order'); // => hbs template
 })
 
+router.get('/login', (req, res) => {
+    res.render('login');
+})
+
 //POST
 router.post('/orders', controllers.orders);
 
