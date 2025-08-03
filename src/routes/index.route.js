@@ -16,12 +16,14 @@ router.get('/login', (req, res) => {
 })
 
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register-data');
 })
 
 //POST
 router.post('/orders', controllers.orders);
 
 router.post('/order-found', controllers.orderFound);
+
+router.post('/register', controllers.register);
 
 export default router;

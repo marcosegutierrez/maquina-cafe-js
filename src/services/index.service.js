@@ -1,5 +1,8 @@
 import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
+import UserManagerMongo from "../persistence/mongodb/user.mng.js";
+
 const OrderMng = new OrderManagerMongo();
+const UserMng = new UserManagerMongo();
 
 export const orders = async (newOrder) => {
     try {
@@ -32,5 +35,24 @@ export const orderFound = async (orderToSearch) => {
         return orderData;
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const register = async (data) => {
+    try {
+        const user = await UserMng.create(data);
+        console.log('user:', user);
+
+        const userData = {
+            name: user.name,
+            nickname: user.nickname,
+            email: user.email,
+            id: user.id
+        }
+
+        return userData;
+        
+    } catch (error) {
+        console.log(error)
     }
 }

@@ -17,3 +17,12 @@ export const orderFound = async (req, res) => {
         console.log(error);
     }
 }
+
+export const register = async (req, res) => {
+    try {
+        const user = await services.register(req.body);
+        res.render('register', user);
+    } catch (error) {
+        console.log(error);
+    }
+}

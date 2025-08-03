@@ -4,18 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.register.css">
+    <link rel="stylesheet" href="styles.order.css">
     <title>Maquina de cafe - Registro</title>
 </head>
 
 <body>
-    <form action="/register" method="POST">
-        <h3>Nombre</h3><input type="text" name="name" />
-        <h3>Apodo</h3><input type="text" name="nickname" />
-        <h3>Email</h3><input type="text" name="email" />
-        <br><br>
-        <button type="submit">Registrarse</button>
-    </form>
+    <div class="order-container">
+        <h2>Usuario regisrado</h2>
+
+        <div class="order-info">
+            <p><strong>Nombre:</strong></p>
+            <p class="data">{{name}}</p>
+            <p><strong>Apodo:</strong></p>
+            <p class="data">{{nickname}}</p>
+            <p><strong>Email:</strong></p>
+            <p class="data">{{email}}</p>
+            <p><strong>Id usuario:</strong></p>
+            <p class="data">{{id}}</p>
+        </div>
+    </div>
 </body>
 
 </html>
