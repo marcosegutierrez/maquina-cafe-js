@@ -1,5 +1,9 @@
 import { Schema, model } from "mongoose";
 
+const getRandomArbitrary = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -12,6 +16,10 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true
+    },
+    code: {
+        type: Number,
+        default: getRandomArbitrary(100000,999999)
     }
 })
 

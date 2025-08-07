@@ -41,6 +41,17 @@ export const orderFound = async (orderToSearch) => {
 
 export const register = async (data) => {
     try {
+        const { email } = data;
+        const userExist = await UserMng.getByEmail(email);
+        if (userExist) {
+            return {
+                name: 'Este usuario ya existe',
+                nickname: 'Este usuario ya existe',
+                email: 'Este usuario ya existe',
+                id: 'Este usuario ya existe'
+            }
+        }
+
         const user = await UserMng.create(data);
         console.log('user:', user);
 
@@ -54,7 +65,7 @@ export const register = async (data) => {
         await sendMail(user, 'register');
 
         return userData;
-        
+
     } catch (error) {
         console.log(error)
     }

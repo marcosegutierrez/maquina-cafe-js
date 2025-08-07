@@ -10,4 +10,20 @@ export default class UserManagerMongo {
         }
     }
 
+    async getById(id) {
+        try {
+            return await UserModel.findById(id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    async getByEmail(email) {
+        try {
+            return await UserModel.findOne({ email: email })
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
 }
