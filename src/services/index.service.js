@@ -1,6 +1,7 @@
 import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
 import UserManagerMongo from "../persistence/mongodb/user.mng.js";
 import { sendMail } from "./mailing.service.js";
+import { generateCodeValidator } from "../utils.js";
 
 const OrderMng = new OrderManagerMongo();
 const UserMng = new UserManagerMongo();
@@ -68,5 +69,20 @@ export const register = async (data) => {
 
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const login = async (email) => {
+    try {
+        const userExist = await UserMng.getByEmail(email);
+        if (userExist) {
+            const code = generateCodeValidator();
+            await UserMng.update(userExist.id, {code: code});
+            await sendMail(userExist, 'login', code);
+            return
+        }
+        return
+    } catch (error) {
+        console.log(error);
     }
 }

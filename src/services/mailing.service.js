@@ -20,7 +20,7 @@ const createMsgLastConnection = name =>
 const createMsgLogin = (name, code) => 
     `<p>Hola ${name}, este es su código para inicio de sesión ${code}.</p>`
 
-export const sendMail = async (user, service) => {
+export const sendMail = async (user, service, code = 0) => {
     try {
         const { name, email } = user;
         let msg = '';

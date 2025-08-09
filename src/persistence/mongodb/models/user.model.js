@@ -1,8 +1,5 @@
 import { Schema, model } from "mongoose";
-
-const getRandomArbitrary = (min, max) => {
-  return Math.floor(Math.random() * (max - min) + min);
-}
+import { generateCodeValidator } from "../../../utils.js";
 
 const UserSchema = new Schema({
     name: {
@@ -19,7 +16,7 @@ const UserSchema = new Schema({
     },
     code: {
         type: Number,
-        default: getRandomArbitrary(100000,999999)
+        default: generateCodeValidator()
     }
 })
 

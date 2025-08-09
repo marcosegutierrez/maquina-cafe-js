@@ -26,4 +26,12 @@ export default class UserManagerMongo {
         }
     }
 
+    async update(id, obj) {
+        try {
+            return await UserModel.findByIdAndUpdate(id, obj, { new: true });
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
 }

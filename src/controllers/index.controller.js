@@ -26,3 +26,12 @@ export const register = async (req, res) => {
         console.log(error);
     }
 }
+
+export const login = async (req, res) => {
+    try {
+        await services.login(req.body.email);
+        res.render('login-code');
+    } catch (error) {
+        console.log(error);
+    }
+}
