@@ -28,4 +28,6 @@ router.post('/register', controllers.register);
 
 router.post('/login', controllers.login);
 
+router.post('/login-validator', controllers.loginValidator);
+
 export default router;

@@ -35,3 +35,17 @@ export const login = async (req, res) => {
         console.log(error);
     }
 }
+
+export const loginValidator = async (req, res) => {
+    try {
+        const { email , access_code } = req.body;
+        const validation = await services.loginValidator(email, access_code);
+        if (validation === true) {
+            res.render('drinks');
+        } else {
+            res.render('login');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

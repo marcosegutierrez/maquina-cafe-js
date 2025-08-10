@@ -86,3 +86,17 @@ export const login = async (email) => {
         console.log(error);
     }
 }
+
+export const loginValidator = async (email, access_code) => {
+    try {
+        const userExist = await UserMng.getByEmail(email);
+        if (userExist) {
+            if (userExist.code === access_code) {
+                return true;
+            }
+        }
+        return false;
+    } catch (error) {
+        console.log(error);
+    }
+}
