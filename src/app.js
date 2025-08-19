@@ -3,6 +3,7 @@ import router from './routes/index.route.js';
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { initMongoDB } from './persistence/mongodb/connection.js';
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 8080;
@@ -18,7 +19,8 @@ const hbs = handlebars.create({
 app
     .use(express.json())
     .use(express.urlencoded({extended: true}))
-    .use(express.static(__dirname + '/public'));
+    .use(express.static(__dirname + '/public'))
+    .use(cookieParser());
 
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');

@@ -18,7 +18,7 @@ const createMsgLastConnection = name =>
     `<p>Hola ${name}, su cuenta ha sido desactivada por inactividad, logeese para reactivar su cuenta.</p>`
 
 const createMsgLogin = (name, code) => 
-    `<p>Hola ${name}, este es su código para inicio de sesión ${code}.</p>`
+    `<p>Hola ${name}, este es su código para inicio de sesión ${code}.<br><br>El mismo expira en 5 minutos.</p>`
 
 export const sendMail = async (user, service, code = 0) => {
     try {

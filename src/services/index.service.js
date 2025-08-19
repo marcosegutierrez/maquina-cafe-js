@@ -79,9 +79,9 @@ export const login = async (email) => {
             const code = generateCodeValidator();
             await UserMng.update(userExist.id, {code: code});
             await sendMail(userExist, 'login', code);
-            return
+            return true
         }
-        return
+        return false
     } catch (error) {
         console.log(error);
     }

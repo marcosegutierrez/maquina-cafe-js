@@ -29,7 +29,9 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        await services.login(req.body.email);
+        const { email } = req.body;
+        const response = await services.login(email);
+        if (response === true) res.cookie('usuario', email , { maxAge: 300000 }); // 5 min
         res.render('login-code');
     } catch (error) {
         console.log(error);
@@ -38,8 +40,9 @@ export const login = async (req, res) => {
 
 export const loginValidator = async (req, res) => {
     try {
-        const { email , access_code } = req.body;
-        const validation = await services.loginValidator(email, access_code);
+        const { access_code } = req.body;
+        const { usuario } = req.cookies;
+        const validation = await services.loginValidator(usuario, access_code);
         if (validation === true) {
             res.render('drinks');
         } else {
