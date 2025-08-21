@@ -10,18 +10,22 @@
 
 <body>
     <div class="order-container">
-        <h2>Usuario regisrado</h2>
+        {{#if user}}
+        <h2>Usuario registrado</h2>
 
         <div class="order-info">
             <p><strong>Nombre:</strong></p>
-            <p class="data">{{name}}</p>
+            <p class="data">{{user.name}}</p>
             <p><strong>Apodo:</strong></p>
-            <p class="data">{{nickname}}</p>
+            <p class="data">{{user.nickname}}</p>
             <p><strong>Email:</strong></p>
-            <p class="data">{{email}}</p>
+            <p class="data">{{user.email}}</p>
             <p><strong>Id usuario:</strong></p>
-            <p class="data">{{id}}</p>
+            <p class="data">{{user.id}}</p>
         </div>
+        {{else}}
+        <h2>Este usuario ya existe</h2>
+        {{/if}}
     </div>
 </body>
 
