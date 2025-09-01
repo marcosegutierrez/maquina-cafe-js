@@ -9,7 +9,7 @@ const UserMng = new UserManagerMongo();
 export const orders = async (newOrder) => {
     try {
         const order = await OrderMng.create(newOrder);
-        console.log('order:', order)
+        console.log('New order:', order)
 
         const orderData = {
             drink: order.drink,
@@ -73,7 +73,7 @@ export const login = async (email) => {
             const code = generateCodeValidator();
             await UserMng.update(userExist.id, {code: code});
             await sendMail(userExist, 'login', code);
-            return true
+            return userExist;
         }
         return false
     } catch (error) {

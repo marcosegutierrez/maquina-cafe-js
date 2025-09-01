@@ -30,9 +30,9 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email } = req.body;
-        const response = await services.login(email);
-        if (response === true) res.cookie('usuario', email , { maxAge: 300000 }); // 5 min
-        res.render('login-code');
+        const userExist = await services.login(email);
+        if (userExist) res.cookie('usuario', email , { maxAge: 300000 }); // 5 min
+        res.render('login-code', { userExist });
     } catch (error) {
         console.log(error);
     }

@@ -9,11 +9,15 @@
 </head>
 
 <body>
+    {{#if userExist}}
     <form action="/login-validator" method="POST">
         <h3>Código de acceso</h3><input type="text" name="access_code" />
         <br><br>
         <button type="submit">Entrar</button>
     </form>
+    {{else}}
+        <h2>El usuario ingresado no existe</h2>
+    {{/if}}
 </body>
 
 </html>
