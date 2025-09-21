@@ -42,8 +42,9 @@ export const loginValidator = async (req, res) => {
     try {
         const { access_code } = req.body;
         const { usuario } = req.cookies;
-        const validation = await services.loginValidator(usuario, access_code);
-        if (validation === true) {
+        const user = await services.loginValidator(usuario, access_code);
+        if (user !== false) {
+            req.session.userId = user._id
             res.render('drinks');
         } else {
             res.render('login');

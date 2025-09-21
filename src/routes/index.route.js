@@ -19,6 +19,11 @@ router.get('/register', (req, res) => {
     res.render('register-data');
 })
 
+router.get('/profile', (req, res) => {
+    if(!req.session.userId) return res.status(401).send('No autorizado');
+    res.send(`Perfil del usuario con el id: ${req.session.userId}`);
+})
+
 //POST
 router.post('/orders', controllers.orders);
 
@@ -29,5 +34,12 @@ router.post('/register', controllers.register);
 router.post('/login', controllers.login);
 
 router.post('/login-validator', controllers.loginValidator);
+
+router.post('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.send('Sesión cerrada');
+    });
+})
 
 export default router;

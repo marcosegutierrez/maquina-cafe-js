@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { generateCodeValidator } from "../../../utils.js";
 
 const UserSchema = new Schema({
     name: {
@@ -15,8 +14,7 @@ const UserSchema = new Schema({
         required: true
     },
     code: {
-        type: Number,
-        default: generateCodeValidator()
+        type: Number
     }
 })
 

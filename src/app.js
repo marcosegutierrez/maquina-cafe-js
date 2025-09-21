@@ -4,6 +4,9 @@ import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { initMongoDB } from './persistence/mongodb/connection.js';
 import cookieParser from "cookie-parser";
+import session from 'express-session';
+import config from './config.js';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 const PORT = 8080;
@@ -18,9 +21,21 @@ const hbs = handlebars.create({
 
 app
     .use(express.json())
-    .use(express.urlencoded({extended: true}))
+    .use(express.urlencoded({ extended: true }))
     .use(express.static(__dirname + '/public'))
-    .use(cookieParser());
+    .use(cookieParser())
+    .use(session({
+        secret: config.SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: config.MONGO_URL
+        }),
+        cookie: {
+            maxAge: 1000 * 60 * 10, // 10 min
+            httpOnly: true
+        }
+    }));
 
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
