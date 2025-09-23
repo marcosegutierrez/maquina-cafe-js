@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     try {
         const { email } = req.body;
         const userExist = await services.login(email);
-        if (userExist) res.cookie('usuario', email , { maxAge: 300000 }); // 5 min
+        if (userExist) res.cookie('usuario', email, { maxAge: 300000 }); // 5 min
         res.render('login-code', { userExist });
     } catch (error) {
         console.log(error);
@@ -49,6 +49,27 @@ export const loginValidator = async (req, res) => {
         } else {
             res.render('login');
         }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const profile = async (req, res) => {
+    try {
+        if (!req.session.userId) return res.status(401).send('No autorizado');
+        const userId = req.session.userId;
+        res.render('profile', { userId });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const logout = async (req, res) => {
+    try {
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.send('Sesión cerrada');
+        });
     } catch (error) {
         console.log(error);
     }
