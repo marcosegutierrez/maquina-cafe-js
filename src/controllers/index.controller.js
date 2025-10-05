@@ -68,7 +68,7 @@ export const logout = async (req, res) => {
     try {
         req.session.destroy(() => {
             res.clearCookie('connect.sid');
-            res.send('Sesión cerrada');
+            res.redirect('/login');
         });
     } catch (error) {
         console.log(error);

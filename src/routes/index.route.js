@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as controllers from "../controllers/index.controller.js";
+import { requireAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get('/register', (req, res) => {
     res.render('register-data');
 })
 
-router.get('/profile', controllers.profile);
+router.get('/profile', requireAuth, controllers.profile);
 
 //POST
 router.post('/orders', controllers.orders);
