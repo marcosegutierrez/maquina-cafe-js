@@ -31,7 +31,9 @@ export const login = async (req, res) => {
     try {
         const { email } = req.body;
         const userExist = await services.login(email);
-        if (userExist) res.cookie('usuario', email, { maxAge: 300000 }); // 5 min
+        // if (userExist) res.cookie('usuario', email, { maxAge: 300000 }); // 5 min
+        if (userExist) req.session.pendingEmail = email;
+        if (!userExist) return res.render('login', { error: 'usuario inexistente' });
         res.render('login-code', { userExist });
     } catch (error) {
         console.log(error);
@@ -41,8 +43,9 @@ export const login = async (req, res) => {
 export const loginValidator = async (req, res) => {
     try {
         const { access_code } = req.body;
-        const { usuario } = req.cookies;
-        const user = await services.loginValidator(usuario, access_code);
+        // const { usuario } = req.cookies;
+        const { pendingEmail } = req.session;
+        const user = await services.loginValidator(pendingEmail, access_code);
         if (user !== false) {
             req.session.userId = user._id
             res.render('drinks');

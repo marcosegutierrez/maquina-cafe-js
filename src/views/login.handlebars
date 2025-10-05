@@ -10,7 +10,10 @@
 
 <body>
     <form action="/login" method="POST">
-            <h3>Email</h3><input type="text" name="email" />
+        {{#if error}}
+        <h2>El usuario ingresado no existe</h2>
+        {{/if}}
+        <h3>Email</h3><input type="text" name="email" />
         <br><br>
         <button type="submit">Enviar código de acceso</button>
     </form>
