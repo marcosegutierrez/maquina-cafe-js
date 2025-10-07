@@ -86,6 +86,7 @@ export const loginValidator = async (email, access_code) => {
         const userExist = await UserMng.getByEmail(email);
         if (userExist) {
             if (userExist.code === Number(access_code)) {
+                await UserMng.update(userExist._id, { code: null});
                 return userExist;
             }
         }
