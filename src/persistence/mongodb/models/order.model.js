@@ -12,22 +12,32 @@ const OrderSchema = new Schema({
     timestamp: {
         type: Date,
         default: Date.now // Automático
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ["active", "cancelled"],
+        default: "active"
     }
 })
 
 // Campo virtual para formatear la fecha en UTC-3
-OrderSchema.virtual('timestampFormatted').get(function() {
+OrderSchema.virtual('timestampFormatted').get(function () {
     return this.timestamp.toLocaleString('es-AR', {
-      timeZone: 'America/Argentina/Buenos_Aires',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      //second: '2-digit',
-      hour12: false
+        timeZone: 'America/Argentina/Buenos_Aires',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        //second: '2-digit',
+        hour12: false
     }).replace(',', '').replaceAll('/', '-') + ' hs';
-  });
+});
 
 // Habilitar los campos virtuales en el JSON de salida
 OrderSchema.set('toJSON', { virtuals: true });

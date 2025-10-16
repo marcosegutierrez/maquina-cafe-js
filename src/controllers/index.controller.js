@@ -47,8 +47,8 @@ export const loginValidator = async (req, res) => {
         const { pendingEmail } = req.session;
         const user = await services.loginValidator(pendingEmail, access_code);
         if (user !== false) {
-            req.session.userId = user._id
-            res.render('drinks');
+            req.session.userId = user._id;
+            res.redirect('/drinks');
         } else {
             res.render('login');
         }
