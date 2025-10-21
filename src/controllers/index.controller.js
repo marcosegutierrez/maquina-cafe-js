@@ -2,7 +2,12 @@ import * as services from "../services/index.service.js";
 
 export const orders = async (req, res) => {
     try {
-        const orderData = await services.orders(req.body);
+        let orderData;
+        if ( req.session.userId ) {
+            orderData = await services.orders(req.body, req.session.userId);
+        } else {
+            orderData = await services.orders(req.body);
+        }
         res.render('order', orderData);
     } catch (error) {
         console.log(error);

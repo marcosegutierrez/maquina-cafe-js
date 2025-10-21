@@ -18,8 +18,13 @@ export default class OrderManagerMongo {
         }
     }
 
-    async create(obj) {
+    async create(newOrder, userId) {
         try {
+            const obj = {
+                drink: newOrder.drink,
+                sugar: newOrder.sugar,
+                userId: userId
+            }
             return await OrderModel.create(obj);
         } catch (error) {
             throw new Error(error);

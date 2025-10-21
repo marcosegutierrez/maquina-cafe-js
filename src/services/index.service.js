@@ -6,16 +6,18 @@ import { generateCodeValidator } from "../utils.js";
 const OrderMng = new OrderManagerMongo();
 const UserMng = new UserManagerMongo();
 
-export const orders = async (newOrder) => {
+export const orders = async (newOrder, userId = null) => {
     try {
-        const order = await OrderMng.create(newOrder);
+        const order = await OrderMng.create(newOrder, userId);
         console.log('New order:', order)
 
+        // console.log('user idddd: ', order.userId.toString())
         const orderData = {
             drink: order.drink,
             sugar: `${order.sugar} cucharadas`,
             date: order.timestampFormatted,
-            id: order.id
+            id: order.id,
+            user: String(order.userId)
         };
 
         return orderData;
