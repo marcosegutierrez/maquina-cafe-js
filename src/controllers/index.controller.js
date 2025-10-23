@@ -87,7 +87,8 @@ export const orders = async (req, res) => {
     try {
         const userId = req.session.userId;
         const userOrders = await services.orders(userId);
-        res.status(200).json(userOrders);
+        res.render('orders', {userOrders});
+        // res.status(200).json(userOrders);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Error al obtener las órdenes" });
