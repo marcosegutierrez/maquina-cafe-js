@@ -1,12 +1,12 @@
 import * as services from "../services/index.service.js";
 
-export const orders = async (req, res) => {
+export const order = async (req, res) => {
     try {
         let orderData;
         if ( req.session.userId ) {
-            orderData = await services.orders(req.body, req.session.userId);
+            orderData = await services.order(req.body, req.session.userId);
         } else {
-            orderData = await services.orders(req.body);
+            orderData = await services.order(req.body);
         }
         res.render('order', orderData);
     } catch (error) {
@@ -80,5 +80,16 @@ export const logout = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const orders = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const userOrders = await services.orders(userId);
+        res.status(200).json(userOrders);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Error al obtener las órdenes" });
     }
 }

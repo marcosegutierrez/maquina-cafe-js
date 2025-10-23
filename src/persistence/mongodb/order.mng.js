@@ -18,6 +18,14 @@ export default class OrderManagerMongo {
         }
     }
 
+    async getByUserId(userId) {
+        try {
+            return await OrderModel.find({ userId });
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     async create(newOrder, userId) {
         try {
             const obj = {
@@ -33,7 +41,7 @@ export default class OrderManagerMongo {
 
     async update(id, obj) {
         try {
-            return await OrderModel.findByIdAndUpdate(id, obj, {new: true});
+            return await OrderModel.findByIdAndUpdate(id, obj, { new: true });
         } catch (error) {
             throw new Error(error);
         }

@@ -6,7 +6,7 @@ import { generateCodeValidator } from "../utils.js";
 const OrderMng = new OrderManagerMongo();
 const UserMng = new UserManagerMongo();
 
-export const orders = async (newOrder, userId = null) => {
+export const order = async (newOrder, userId = null) => {
     try {
         const order = await OrderMng.create(newOrder, userId);
         console.log('New order:', order)
@@ -93,6 +93,15 @@ export const loginValidator = async (email, access_code) => {
             }
         }
         return false;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const orders = async (userId) => {
+    try {
+        const userOrders = await OrderMng.getByUserId(userId);
+        return userOrders;
     } catch (error) {
         console.log(error);
     }

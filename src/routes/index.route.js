@@ -22,8 +22,10 @@ router.get('/register', (req, res) => {
 
 router.get('/profile', requireAuth, controllers.profile);
 
+router.get('/orders', requireAuth, controllers.orders);
+
 //POST
-router.post('/orders', controllers.orders);
+router.post('/order', controllers.order);
 
 router.post('/order-found', controllers.orderFound);
 
