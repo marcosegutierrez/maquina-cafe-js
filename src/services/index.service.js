@@ -101,7 +101,17 @@ export const loginValidator = async (email, access_code) => {
 export const orders = async (userId) => {
     try {
         const userOrders = await OrderMng.getByUserId(userId);
-        return userOrders;
+
+        const userOrdersFormatted = userOrders.map(order => ({
+            drink: order.drink,
+            sugar: order.sugar,
+            date: order.timestampFormatted,
+            id: order.id,
+            user: String(order.userId),
+            status: order.status
+        }));
+
+        return userOrdersFormatted;
     } catch (error) {
         console.log(error);
     }
