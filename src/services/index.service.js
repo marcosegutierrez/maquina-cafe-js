@@ -116,3 +116,15 @@ export const orders = async (userId) => {
         console.log(error);
     }
 }
+
+export const cancelOrder = async (orderId, userId) => {
+    try {
+        const order = await OrderMng.cancelOrder(orderId,userId);
+        if (!order) return false;
+        order.status = 'cancelled';
+        await order.save();
+        return order;
+    } catch (error) {
+        
+    }
+}

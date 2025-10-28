@@ -94,3 +94,17 @@ export const orders = async (req, res) => {
         return res.status(500).json({ message: "Error al obtener las órdenes" });
     }
 }
+
+export const cancelOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const userId = req.session.userId;
+        const order = await services.cancelOrder(orderId, userId);
+        if (order === false) {
+            return res.status(404).send('Orden no pertenece al usuario');
+        }
+        res.redirect('/search-order');
+    } catch (error) {
+        console.log(error);
+    }
+}

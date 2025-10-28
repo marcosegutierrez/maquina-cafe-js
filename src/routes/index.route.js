@@ -37,4 +37,6 @@ router.post('/login-validator', controllers.loginValidator);
 
 router.post('/logout', controllers.logout);
 
+router.post('/order/:id/cancel', controllers.cancelOrder);
+
 export default router;
