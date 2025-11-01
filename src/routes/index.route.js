@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as controllers from "../controllers/index.controller.js";
 import { requireAuth } from "../middlewares/auth.js";
+import { loginEmailValidator } from "../validators/login.validators.js";
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.post('/order-found', controllers.orderFound);
 
 router.post('/register', controllers.register);
 
-router.post('/login', controllers.login);
+router.post('/login', loginEmailValidator, controllers.login);
 
 router.post('/login-validator', controllers.loginValidator);
 
