@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as controllers from "../controllers/index.controller.js";
 import { requireAuth } from "../middlewares/auth.js";
 import { loginEmailValidator } from "../validators/login.validators.js";
+import { loginRateLimiter } from "../middlewares/rateLimit.js";
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.post('/order-found', controllers.orderFound);
 
 router.post('/register', controllers.register);
 
-router.post('/login', loginEmailValidator, controllers.login);
+router.post('/login', loginRateLimiter, loginEmailValidator, controllers.login);
 
 router.post('/login-validator', controllers.loginValidator);
 
