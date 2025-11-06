@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import session from 'express-session';
 import config from './config.js';
 import MongoStore from 'connect-mongo';
+import { globalLimiter } from './middlewares/rateLimit.js';
 
 const app = express();
 const PORT = 8080;
@@ -35,7 +36,8 @@ app
             maxAge: 1000 * 60 * 10, // 10 min
             httpOnly: true
         }
-    }));
+    }))
+    .use(globalLimiter);
 
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
