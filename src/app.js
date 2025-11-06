@@ -8,6 +8,8 @@ import session from 'express-session';
 import config from './config.js';
 import MongoStore from 'connect-mongo';
 import { globalLimiter } from './middlewares/rateLimit.js';
+import helmet from 'helmet';
+import cors from 'cors';
 
 const app = express();
 const PORT = 8080;
@@ -37,7 +39,9 @@ app
             httpOnly: true
         }
     }))
-    .use(globalLimiter);
+    .use(globalLimiter)
+    .use(helmet())
+    .use(cors());
 
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
