@@ -1,5 +1,6 @@
 import * as services from "../services/index.service.js";
 import { validationResult } from "express-validator";
+import { AppError } from "../utils/errors.js";
 
 export const order = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ export const register = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -41,14 +42,16 @@ export const login = async (req, res) => {
         const userExist = await services.login(email);
         // if (userExist) res.cookie('usuario', email, { maxAge: 300000 }); // 5 min
         if (userExist) req.session.pendingEmail = email;
-        if (!userExist) return res.render('login', { error: 'usuario inexistente' });
+        if (!userExist) {
+            throw new AppError('Usuario no encontrado', 401);
+        }
         res.render('login-code', { userExist });
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 
-export const loginValidator = async (req, res) => {
+export const loginValidator = async (req, res, next) => {
     try {
         const { access_code } = req.body;
         // const { usuario } = req.cookies;
@@ -58,10 +61,10 @@ export const loginValidator = async (req, res) => {
             req.session.userId = user._id;
             res.redirect('/drinks');
         } else {
-            res.render('login');
+            throw new AppError('El codigo o usuario no coincide', 401);
         }
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 

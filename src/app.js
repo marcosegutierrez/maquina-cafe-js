@@ -10,6 +10,7 @@ import MongoStore from 'connect-mongo';
 import { globalLimiter } from './middlewares/rateLimit.js';
 import helmet from 'helmet';
 import cors from 'cors';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 const PORT = 8080;
@@ -39,9 +40,9 @@ app
             httpOnly: true
         }
     }))
-    .use(globalLimiter)
     .use(helmet())
-    .use(cors());
+    .use(cors())
+    .use(globalLimiter);
 
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
@@ -52,7 +53,9 @@ app.get('/', (req, res) => {
     res.redirect('/drinks');
 });
 
-app.use('/', router);
+app
+    .use('/', router)
+    .use(errorHandler);
 
 initMongoDB();
 
