@@ -82,7 +82,7 @@ export const logout = async (req, res) => {
     try {
         req.session.destroy(() => {
             res.clearCookie('connect.sid');
-            res.redirect('/login');
+            res.redirect('/users/login');
         });
     } catch (error) {
         console.log(error);
@@ -109,7 +109,7 @@ export const cancelOrder = async (req, res) => {
         if (order === false) {
             return res.status(404).send('Orden no pertenece al usuario');
         }
-        res.redirect('/search-order');
+        res.redirect('/orders/search-order');
     } catch (error) {
         console.log(error);
     }

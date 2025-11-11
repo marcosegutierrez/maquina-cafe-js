@@ -1,44 +1,13 @@
 import { Router } from "express";
-import * as controllers from "../controllers/index.controller.js";
-import { requireAuth } from "../middlewares/auth.js";
-import { loginEmailValidator } from "../validators/login.validators.js";
-import { loginRateLimiter } from "../middlewares/rateLimit.js";
+import ordersRoutes from './orders.route.js';
+import drinksRoutes from './drinks.route.js';
+import usersRoutes from './users.route.js';
+
 
 const router = Router();
 
-router.get('/drinks', (req, res) => {
-    res.render('drinks'); // => hbs template
-})
-
-router.get('/search-order', (req, res) => {
-    res.render('search-order'); // => hbs template
-})
-
-router.get('/login', (req, res) => {
-    res.render('login');
-})
-
-router.get('/register', (req, res) => {
-    res.render('register-data');
-})
-
-router.get('/profile', requireAuth, controllers.profile);
-
-router.get('/orders', requireAuth, controllers.orders);
-
-//POST
-router.post('/order', controllers.order);
-
-router.post('/order-found', controllers.orderFound);
-
-router.post('/register', controllers.register);
-
-router.post('/login', loginRateLimiter, loginEmailValidator, controllers.login);
-
-router.post('/login-validator', controllers.loginValidator);
-
-router.post('/logout', controllers.logout);
-
-router.post('/order/:id/cancel', controllers.cancelOrder);
+router.use('/orders', ordersRoutes);
+router.use('/drinks', drinksRoutes);
+router.use('/users', usersRoutes);
 
 export default router;

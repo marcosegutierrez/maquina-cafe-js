@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.drinks.css">
+    <link rel="stylesheet" href="/styles.drinks.css">
     <title>Maquina de cafe - Bebidas</title>
 </head>
 
 <body>
-     <form action="/order" method="POST">
+     <form action="/orders/order" method="POST">
         <h3>Elige tu bebida:</h3>
         <div class="options">
             <input type="radio" id="cafe" name="drink" value="Café" required>
@@ -43,7 +43,7 @@
         <br>
         <button type="submit">Enviar</button>
         <br><br>
-        <a href="/search-order">Buscar orden</a>
+        <a href="/orders/search-order">Buscar orden</a>
     </form>
 </body>
 
