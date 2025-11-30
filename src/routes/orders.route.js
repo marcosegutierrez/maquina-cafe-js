@@ -3,7 +3,7 @@ import { requireAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
-import * as controllers from "../controllers/index.controller.js";
+import * as controllers from "../controllers/orders.controller.js";
 
 router.get('/search-order', (req, res) => {
     res.render('search-order'); // => hbs template

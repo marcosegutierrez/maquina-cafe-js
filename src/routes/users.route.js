@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as controllers from "../controllers/index.controller.js";
+import * as controllers from "../controllers/users.controller.js";
 import { requireAuth } from "../middlewares/auth.js";
 import { loginEmailValidator } from "../validators/login.validators.js";
 import { loginRateLimiter } from "../middlewares/rateLimit.js";
