@@ -48,13 +48,13 @@ app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
-app.get('/', (req, res) => {
-    // Redirección a página principal
-    res.redirect('/drinks');
-});
+// app.get('/', (req, res) => {
+//     // Redirección a página principal
+//     res.redirect('/drinks');
+// });
 
 app
-    .use('/', router)
+    .use('/api/v1', router)
     .use(errorHandler);
 
 initMongoDB();

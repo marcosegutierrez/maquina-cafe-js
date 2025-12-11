@@ -1,12 +1,12 @@
 import * as services from "../services/orders.service.js";
 
-export const order = async (req, res) => {
+export const createOrder = async (req, res) => {
     try {
         let orderData;
         if ( req.session.userId ) {
-            orderData = await services.order(req.body, req.session.userId);
+            orderData = await services.createOrder(req.body, req.session.userId);
         } else {
-            orderData = await services.order(req.body);
+            orderData = await services.createOrder(req.body);
         }
         res.render('order', orderData);
     } catch (error) {
@@ -23,14 +23,23 @@ export const orderFound = async (req, res) => {
     }
 }
 
-export const orders = async (req, res) => {
+export const getOrders = async (req, res) => {
     try {
         const userId = req.session.userId;
-        const userOrders = await services.orders(userId);
+        const userOrders = await services.getOrders(userId);
         res.render('orders', {userOrders});
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Error al obtener las órdenes" });
+    }
+}
+
+export const getOrderById = async (req, res) => {
+    try {
+        const order = await services.getOrderById(req.body.search_order);
+        return order;
+    } catch (error) {
+        console.log(error);
     }
 }
 

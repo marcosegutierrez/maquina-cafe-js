@@ -1,22 +1,29 @@
 import { Router } from "express";
 import { requireAuth } from "../middlewares/auth.js";
+import * as controllers from "../controllers/orders.controller.js";
 
 const router = Router();
 
-import * as controllers from "../controllers/orders.controller.js";
+// //Ingresar id de orden a buscar
+// router.get('/search-order', (req, res) => {
+//     res.render('search-order'); // => hbs template
+// })
 
-router.get('/search-order', (req, res) => {
-    res.render('search-order'); // => hbs template
-})
+//Trae las ordenes de usuario logado
+router.get('/', requireAuth, controllers.getOrders);
 
-router.get('/', requireAuth, controllers.orders);
+//Trae orden por id
+router.get('/:id', requireAuth, controllers.getOrderById);
 
 // POST
 
-router.post('/order', controllers.order);
+//Crea una orden
+router.post('/', controllers.createOrder);
 
-router.post('/order-found', controllers.orderFound);
+//Trae orden encontrada
+// router.post('/order-found', controllers.orderFound);
 
-router.post('/order/:id/cancel', controllers.cancelOrder);
+//Cancela orden
+router.post('/order/:id/cancel', requireAuth, controllers.cancelOrder);
 
 export default router;

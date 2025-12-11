@@ -2,7 +2,7 @@ import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
 
 const OrderMng = new OrderManagerMongo();
 
-export const order = async (newOrder, userId = null) => {
+export const createOrder = async (newOrder, userId = null) => {
     try {
         const order = await OrderMng.create(newOrder, userId);
         console.log('New order:', order)
@@ -37,7 +37,16 @@ export const orderFound = async (orderToSearch) => {
     }
 }
 
-export const orders = async (userId) => {
+export const getOrderById = async (orderId) => {
+    try {
+        const order = await OrderMng.getById(orderId);
+        return order;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getOrders = async (userId) => {
     try {
         const userOrders = await OrderMng.getByUserId(userId);
 
