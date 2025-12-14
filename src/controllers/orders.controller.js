@@ -6,40 +6,76 @@ export const createOrder = async (req, res) => {
         if ( req.session.userId ) {
             orderData = await services.createOrder(req.body, req.session.userId);
         } else {
-            orderData = await services.createOrder(req.body);
+            orderData = await services.createOrder(req.body); // Invitado
         }
-        res.render('order', orderData);
+        return res.status(201).json({
+            success: true,
+            message: "Orden creada exitosamente",
+            order: orderData
+        });
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error al crear la orden"
+        });
     }
 }
 
-export const orderFound = async (req, res) => {
-    try {
-        const orderData = await services.orderFound(req.body.search_order);
-        res.render('order-found', orderData);
-    } catch (error) {
-        console.log(error);
-    }
-}
+//Revisar vista renderizada
+
+// export const orderFound = async (req, res) => {
+//     try {
+//         const orderData = await services.orderFound(req.body.search_order);
+//         res.render('order-found', orderData);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 export const getOrders = async (req, res) => {
     try {
         const userId = req.session.userId;
         const userOrders = await services.getOrders(userId);
-        res.render('orders', {userOrders});
+        if ( !userOrders || userOrders.length === 0 ) {
+            return res.status(404).json({
+                success: false,
+                message: "No se encontraron órdenes"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            orders: userOrders
+        });        
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Error al obtener las órdenes" });
+        return res.status(500).json({
+            success: false,
+            message: "Error al obtener las órdenes"
+        });
     }
 }
 
 export const getOrderById = async (req, res) => {
     try {
-        const order = await services.getOrderById(req.body.search_order);
-        return order;
+        const { id } = req.params;
+        const order = await services.getOrderById(id);
+        if ( !order ) {
+            return res.status(404).json({
+                status: false,
+                message: "Orden no encontrada"
+            });
+        } 
+        return res.status(200).json({
+            success: true,
+            message: "Error al obtener la orden"
+        });
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error al obtener la orden"
+        });
     }
 }
 
@@ -48,11 +84,21 @@ export const cancelOrder = async (req, res) => {
         const orderId = req.params.id;
         const userId = req.session.userId;
         const order = await services.cancelOrder(orderId, userId);
-        if (order === false) {
-            return res.status(404).send('Orden no pertenece al usuario');
+        if ( order === false ) {
+            return res.status(404).json({
+                success: false,
+                message: "Orden no encontrada o no disponible"
+            });
         }
-        res.redirect('/orders/search-order');
+        return res.status(200).json({
+            success: true,
+            message: "Orden cancelada exitosamente"
+        });
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error al cancelar la orden"
+        });
     }
 }

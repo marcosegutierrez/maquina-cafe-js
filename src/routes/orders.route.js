@@ -24,6 +24,6 @@ router.post('/', controllers.createOrder);
 // router.post('/order-found', controllers.orderFound);
 
 //Cancela orden
-router.post('/order/:id/cancel', requireAuth, controllers.cancelOrder);
+router.patch('/order/:id/cancel', requireAuth, controllers.cancelOrder);
 
 export default router;
