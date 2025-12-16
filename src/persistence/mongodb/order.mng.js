@@ -55,11 +55,11 @@ export default class OrderManagerMongo {
         }
     }
 
-    async cancelOrder(orderId, userId) {
-        try {
-            return await OrderModel.findOne({_id: orderId, userId});
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
+    // async cancelOrder(orderId, userId) {
+    //     try {
+    //         return await OrderModel.findOne({_id: orderId, userId});
+    //     } catch (error) {
+    //         throw new Error(error);
+    //     }
+    // }
 }

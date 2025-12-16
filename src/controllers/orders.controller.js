@@ -14,24 +14,9 @@ export const createOrder = async (req, res) => {
             order: orderData
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Error al crear la orden"
-        });
+        next(error);
     }
 }
-
-//Revisar vista renderizada
-
-// export const orderFound = async (req, res) => {
-//     try {
-//         const orderData = await services.orderFound(req.body.search_order);
-//         res.render('order-found', orderData);
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
 
 export const getOrders = async (req, res) => {
     try {
@@ -48,11 +33,7 @@ export const getOrders = async (req, res) => {
             orders: userOrders
         });        
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Error al obtener las órdenes"
-        });
+        next(error);
     }
 }
 
@@ -68,14 +49,10 @@ export const getOrderById = async (req, res) => {
         } 
         return res.status(200).json({
             success: true,
-            message: "Error al obtener la orden"
+            order   
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Error al obtener la orden"
-        });
+        next(error);
     }
 }
 
@@ -84,7 +61,7 @@ export const cancelOrder = async (req, res) => {
         const orderId = req.params.id;
         const userId = req.session.userId;
         const order = await services.cancelOrder(orderId, userId);
-        if ( order === false ) {
+        if ( order === null ) {
             return res.status(404).json({
                 success: false,
                 message: "Orden no encontrada o no disponible"
@@ -95,10 +72,6 @@ export const cancelOrder = async (req, res) => {
             message: "Orden cancelada exitosamente"
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Error al cancelar la orden"
-        });
+        next(error);
     }
 }

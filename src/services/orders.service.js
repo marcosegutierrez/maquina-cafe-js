@@ -5,35 +5,10 @@ const OrderMng = new OrderManagerMongo();
 export const createOrder = async (newOrder, userId = null) => {
     try {
         const order = await OrderMng.create(newOrder, userId);
-        console.log('New order:', order)
-
-        const orderData = {
-            drink: order.drink,
-            sugar: `${order.sugar} cucharadas`,
-            date: order.timestampFormatted,
-            id: order.id,
-            user: String(order.userId)
-        };
-
-        return orderData;
-
+        return order; // devolver entidad, no formateo
     } catch (error) {
-        console.log(error);
-    }
-}
-
-export const orderFound = async (orderToSearch) => {
-    try {
-        const order = await OrderMng.getById(orderToSearch);
-        const orderData = {
-            drink: order.drink,
-            sugar: `${order.sugar} cucharadas`,
-            date: order.timestampFormatted,
-            id: order.id
-        };
-        return orderData;
-    } catch (error) {
-        console.log(error);
+        console.error('[OrderService]', error);
+        throw error;
     }
 }
 
@@ -42,37 +17,34 @@ export const getOrderById = async (orderId) => {
         const order = await OrderMng.getById(orderId);
         return order;
     } catch (error) {
-        console.log(error);
+        console.error('[OrderService]', error);
+        throw error;
     }
 }
 
 export const getOrders = async (userId) => {
     try {
-        const userOrders = await OrderMng.getByUserId(userId);
-
-        const userOrdersFormatted = userOrders.map(order => ({
-            drink: order.drink,
-            sugar: order.sugar,
-            date: order.timestampFormatted,
-            id: order.id,
-            user: String(order.userId),
-            status: order.status
-        }));
-
-        return userOrdersFormatted;
+        const orders = await OrderMng.getByUserId(userId);
+        return orders;
     } catch (error) {
-        console.log(error);
+        console.error('[OrderService]', error);
+        throw error;
     }
 }
 
 export const cancelOrder = async (orderId, userId) => {
     try {
-        const order = await OrderMng.cancelOrder(orderId,userId);
-        if (!order) return false;
+        const order = await OrderMng.getById(orderId);
+
+        if ( !order ) return null;
+        if ( order.userId?.toString() !== userId ) return null;
+        if ( order.status === 'cancelled' ) return null;
+        
         order.status = 'cancelled';
         await order.save();
         return order;
     } catch (error) {
-        
+        console.error('[OrderService]', error);
+        throw error;
     }
 }
