@@ -1,6 +1,7 @@
 import UserManagerMongo from "../persistence/mongodb/user.mng.js";
 import { sendMail } from "./mailing.service.js";
 import { generateCodeValidator } from "../utils.js";
+import { AppError } from "../utils/errors.js";
 
 const UserMng = new UserManagerMongo();
 
@@ -33,29 +34,33 @@ export const register = async (data) => {
 export const login = async (email) => {
     try {
         const userExist = await UserMng.getByEmail(email);
-        if (userExist) {
+        
+        if ( userExist ) {
             const code = generateCodeValidator();
             await UserMng.update(userExist.id, {code: code});
             await sendMail(userExist, 'login', code);
-            return userExist;
         }
-        return false
+
+        return userExist;
     } catch (error) {
-        console.log(error);
+        cconsole.error('[UserService]', error);
+        throw error;
     }
 }
 
 export const loginValidator = async (email, access_code) => {
     try {
         const userExist = await UserMng.getByEmail(email);
-        if (userExist) {
-            if (userExist.code === Number(access_code)) {
-                await UserMng.update(userExist._id, { code: null});
-                return userExist;
-            }
+
+        if ( !userExist || userExist.code !== Number(access_code) ) {
+            throw new AppError('Código inválido', 401);
         }
-        return false;
+
+        await UserMng.update(userExist._id, { code: null});
+
+        return userExist;
     } catch (error) {
-        console.log(error);
+        cconsole.error('[UserService]', error);
+        throw error;
     }
 }

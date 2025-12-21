@@ -14,14 +14,25 @@ export const register = async (req, res) => {
 export const login = async (req, res, next) => {
     try {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+        if ( !errors.isEmpty() ) {
+            throw new AppError('Email inválido', 400);
+        }
+
         const { email } = req.body;
         const userExist = await services.login(email);
-        if (userExist) req.session.pendingEmail = email;
-        if (!userExist) {
+        
+        if ( !userExist ) {
             throw new AppError('Usuario no encontrado', 401);
         }
-        res.render('login-code', { userExist });
+
+        req.session.pendingEmail = email;
+
+        return res.status(200).json({
+            success: true,
+            message: 'Código de acceso enviado por mail'
+        });
+        
     } catch (error) {
         next(error);
     }
@@ -31,13 +42,25 @@ export const loginValidator = async (req, res, next) => {
     try {
         const { access_code } = req.body;
         const { pendingEmail } = req.session;
+
+        if (!pendingEmail) {
+            throw new AppError('Sesión de login expirada', 400);
+        }
+
         const user = await services.loginValidator(pendingEmail, access_code);
-        if (user !== false) {
-            req.session.userId = user._id;
-            res.redirect('/drinks');
-        } else {
+
+        if (!user) {
             throw new AppError('El codigo o usuario no coincide', 401);
         }
+
+        req.session.userId = user._id;
+        delete req.session.pendingEmail;
+
+        return res.status(200).json({
+            success: true,
+            message: 'Login Ok'
+        });
+
     } catch (error) {
         next(error);
     }
