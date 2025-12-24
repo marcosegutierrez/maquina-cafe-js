@@ -1,6 +1,6 @@
 import * as services from "../services/orders.service.js";
 
-export const createOrder = async (req, res) => {
+export const createOrder = async (req, res, next) => {
     try {
         let orderData;
         if ( req.session.userId ) {
@@ -18,7 +18,7 @@ export const createOrder = async (req, res) => {
     }
 }
 
-export const getOrders = async (req, res) => {
+export const getOrders = async (req, res, next) => {
     try {
         const userId = req.session.userId;
         const userOrders = await services.getOrders(userId);
@@ -37,7 +37,7 @@ export const getOrders = async (req, res) => {
     }
 }
 
-export const getOrderById = async (req, res) => {
+export const getOrderById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const order = await services.getOrderById(id);
@@ -56,7 +56,7 @@ export const getOrderById = async (req, res) => {
     }
 }
 
-export const cancelOrder = async (req, res) => {
+export const cancelOrder = async (req, res, next) => {
     try {
         const orderId = req.params.id;
         const userId = req.session.userId;

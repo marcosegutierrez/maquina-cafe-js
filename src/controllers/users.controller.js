@@ -2,12 +2,18 @@ import * as services from "../services/users.service.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../utils/errors.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     try {
         const user = await services.register(req.body);
-        res.render('register', { user });
+
+        return res.status(201).json({
+            success: true,
+            message: `Usuario registrado correctamente`,
+            user: user
+        });
+
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 
@@ -15,14 +21,14 @@ export const login = async (req, res, next) => {
     try {
         const errors = validationResult(req);
 
-        if ( !errors.isEmpty() ) {
+        if (!errors.isEmpty()) {
             throw new AppError('Email inválido', 400);
         }
 
         const { email } = req.body;
         const userExist = await services.login(email);
-        
-        if ( !userExist ) {
+
+        if (!userExist) {
             throw new AppError('Usuario no encontrado', 401);
         }
 
@@ -32,7 +38,7 @@ export const login = async (req, res, next) => {
             success: true,
             message: 'Código de acceso enviado por mail'
         });
-        
+
     } catch (error) {
         next(error);
     }
@@ -66,23 +72,43 @@ export const loginValidator = async (req, res, next) => {
     }
 }
 
-export const profile = async (req, res) => {
+export const profile = async (req, res, next) => {
     try {
-        if (!req.session.userId) return res.status(401).send('No autorizado');
-        const userId = req.session.userId;
-        res.render('profile', { userId });
+
+        if (!req.session.userId) {
+            throw new AppError('No autorizado', 401);
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: `Perfil del usuario con el id: ${req.session.userId}`
+        });
+
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 
-export const logout = async (req, res) => {
+export const logout = async (req, res, next) => {
     try {
-        req.session.destroy(() => {
+
+        if (!req.session) {
+            return res.status(200).json({
+                success: true,
+                message: 'No había sesión activa'
+            });
+        }
+
+        req.session.destroy( err => {
+            if (err) return next(err);
+
             res.clearCookie('connect.sid');
-            res.redirect('/users/login');
+            return res.status(200).json({
+                success: true,
+                message: 'Sesión cerrada correctamente'
+            });
         });
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }

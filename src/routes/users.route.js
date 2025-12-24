@@ -6,14 +6,6 @@ import { loginRateLimiter } from "../middlewares/rateLimit.js";
 
 const router = Router();
 
-router.get('/login', (req, res) => {
-    res.render('login');
-})
-
-router.get('/register', (req, res) => {
-    res.render('register-data');
-})
-
 router.get('/profile', requireAuth, controllers.profile);
 
 //POST

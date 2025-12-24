@@ -9,8 +9,9 @@ export const register = async (data) => {
     try {
         const { email } = data;
         const userExist = await UserMng.getByEmail(email);
+
         if (userExist) {
-            return false;
+            throw new AppError('Este usuario ya se encuentra registrado', 409);
         }
 
         const user = await UserMng.create(data);
@@ -27,7 +28,8 @@ export const register = async (data) => {
         return userData;
 
     } catch (error) {
-        console.log(error)
+        console.error('[UserService]', error);
+        throw error;
     }
 }
 
@@ -43,7 +45,7 @@ export const login = async (email) => {
 
         return userExist;
     } catch (error) {
-        cconsole.error('[UserService]', error);
+        console.error('[UserService]', error);
         throw error;
     }
 }
@@ -60,7 +62,7 @@ export const loginValidator = async (email, access_code) => {
 
         return userExist;
     } catch (error) {
-        cconsole.error('[UserService]', error);
+        console.error('[UserService]', error);
         throw error;
     }
 }
