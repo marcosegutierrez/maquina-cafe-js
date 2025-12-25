@@ -55,10 +55,6 @@ export const loginValidator = async (req, res, next) => {
 
         const user = await services.loginValidator(pendingEmail, access_code);
 
-        if (!user) {
-            throw new AppError('El codigo o usuario no coincide', 401);
-        }
-
         req.session.userId = user._id;
         delete req.session.pendingEmail;
 
@@ -74,10 +70,6 @@ export const loginValidator = async (req, res, next) => {
 
 export const profile = async (req, res, next) => {
     try {
-
-        if (!req.session.userId) {
-            throw new AppError('No autorizado', 401);
-        }
 
         return res.status(200).json({
             success: true,
