@@ -1,6 +1,7 @@
 import * as services from "../services/users.service.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../utils/errors.js";
+import { LOGIN_SECURITY } from "../config.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -55,6 +56,10 @@ export const loginValidator = async (req, res, next) => {
 
         const user = await services.loginValidator(pendingEmail, access_code);
 
+        //Login Ok
+        req.session.loginAttemps = 0;
+        req.session.blockedUntil = null;
+
         req.session.userId = user._id;
         delete req.session.pendingEmail;
 
@@ -64,6 +69,13 @@ export const loginValidator = async (req, res, next) => {
         });
 
     } catch (error) {
+
+        req.session.loginAttemps = (req.session.loginAttemps || 0) + 1;
+
+        if (req.session.loginAttemps >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+            req.session.blockedUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
+        }
+
         next(error);
     }
 }
