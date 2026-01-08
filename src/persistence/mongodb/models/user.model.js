@@ -15,6 +15,9 @@ const UserSchema = new Schema({
     },
     code: {
         type: Number
+    },
+    codeExpiresAt: {
+        type: Date
     }
 })
 

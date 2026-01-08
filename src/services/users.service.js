@@ -36,10 +36,11 @@ export const register = async (data) => {
 export const login = async (email) => {
     try {
         const userExist = await UserMng.getByEmail(email);
+        const expires = new Date(Date.now() + 5 * 60 * 1000);
         
         if ( userExist ) {
             const code = generateCodeValidator();
-            await UserMng.update(userExist.id, {code: code});
+            await UserMng.update(userExist.id, {code, codeExpiresAt: expires});
             await sendMail(userExist, 'login', code);
         }
 
@@ -54,6 +55,10 @@ export const loginValidator = async (email, access_code) => {
     try {
         const userExist = await UserMng.getByEmail(email);
 
+        if (Date.now() > userExist.codeExpiresAt) {
+            throw new AppError('Código expirado', 401);
+        }
+
         if ( !userExist || userExist.code !== Number(access_code) ) {
             throw new AppError('El código o usuario no coincide', 401);
         }
@@ -62,7 +67,6 @@ export const loginValidator = async (email, access_code) => {
 
         return userExist;
     } catch (error) {
-        console.error('[UserService]', error);
         throw error;
     }
 }

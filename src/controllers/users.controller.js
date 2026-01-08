@@ -57,7 +57,7 @@ export const loginValidator = async (req, res, next) => {
         const user = await services.loginValidator(pendingEmail, access_code);
 
         //Login Ok
-        req.session.loginAttemps = 0;
+        req.session.loginAttempts = 0;
         req.session.blockedUntil = null;
 
         req.session.userId = user._id;
@@ -70,9 +70,9 @@ export const loginValidator = async (req, res, next) => {
 
     } catch (error) {
 
-        req.session.loginAttemps = (req.session.loginAttemps || 0) + 1;
+        req.session.loginAttempts = (req.session.loginAttempts || 0) + 1;
 
-        if (req.session.loginAttemps >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+        if (req.session.loginAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
             req.session.blockedUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
         }
 
