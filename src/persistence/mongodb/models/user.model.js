@@ -18,6 +18,14 @@ const UserSchema = new Schema({
     },
     codeExpiresAt: {
         type: Date
+    },
+    loginAttempts: {
+        type: Number,
+        default: 0
+    },
+    lockUntil: {
+        type: Date,
+        default: null
     }
 })
 
