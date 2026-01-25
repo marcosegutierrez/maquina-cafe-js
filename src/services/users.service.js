@@ -40,6 +40,9 @@ export const login = async (email) => {
         const expires = new Date(Date.now() + 5 * 60 * 1000);
         
         if ( userExist ) {
+            if (userExist.lockUntil && userExist.lockUntil > Date.now()) {
+                throw new AppError('Su cuenta está bloqueada debido a múltiples intentos fallidos. Intente nuevamente más tarde.', 423);
+            }
             const code = generateCodeValidator();
             await UserMng.update(userExist.id, {code, codeExpiresAt: expires});
             await sendMail(userExist, 'login', code);
@@ -56,11 +59,16 @@ export const loginValidator = async (email, access_code) => {
     try {
         const userExist = await UserMng.getByEmail(email);
 
-        if ( userExist.lockUntil && userExist.lockUntil > Date.now()) {
-            throw new AppError('Demasiados intentos fallidos. Intente más tarde.', 423);
+        if (userExist.lockUntil) {
+            if (userExist.lockUntil > Date.now()) {
+                throw new AppError('Demasiados intentos fallidos. Intente más tarde.', 423);
+            } else if (userExist.lockUntil <= Date.now()) {
+                await UserMng.update(userExist._id, { loginAttempts: 0, lockUntil: null });
+            }
         }
 
         if (Date.now() > userExist.codeExpiresAt) {
+            UserMng.update(userExist._id, { loginAttempts: userExist.loginAttempts+1})
             throw new AppError('Código expirado', 401);
         }
 
