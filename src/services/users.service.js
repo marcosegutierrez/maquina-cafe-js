@@ -43,8 +43,12 @@ export const login = async (email) => {
             if (userExist.lockUntil && userExist.lockUntil > Date.now()) {
                 throw new AppError('Su cuenta está bloqueada debido a múltiples intentos fallidos. Intente nuevamente más tarde.', 423);
             }
+            if (userExist.mailAttempts && userExist.mailAttempts >= LOGIN_SECURITY.MAX_MAILS) {
+                await UserMng.update(userExist.id, { lockUntil: Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS, mailAttempts: 0 });
+                throw new AppError('Demasiados intentos de envío de código. Su cuenta ha sido bloqueada temporalmente.', 423);
+            }
             const code = generateCodeValidator();
-            await UserMng.update(userExist.id, {code, codeExpiresAt: expires});
+            await UserMng.update(userExist.id, { code, codeExpiresAt: expires, mailAttempts: userExist.mailAttempts + 1 });
             await sendMail(userExist, 'login', code);
         }
 
@@ -63,28 +67,28 @@ export const loginValidator = async (email, access_code) => {
             if (userExist.lockUntil > Date.now()) {
                 throw new AppError('Demasiados intentos fallidos. Intente más tarde.', 423);
             } else if (userExist.lockUntil <= Date.now()) {
-                await UserMng.update(userExist._id, { loginAttempts: 0, lockUntil: null });
+                await UserMng.update(userExist._id, { codeAttempts: 0, lockUntil: null });
             }
         }
 
         if (Date.now() > userExist.codeExpiresAt) {
-            UserMng.update(userExist._id, { loginAttempts: userExist.loginAttempts+1})
+            UserMng.update(userExist._id, { codeAttempts: userExist.codeAttempts+1})
             throw new AppError('Código expirado', 401);
         }
 
         if ( !userExist ) {
             throw new AppError('El código o usuario no coincide', 401);
         } else if (userExist.code !== Number(access_code)) {
-            UserMng.update(userExist._id, { loginAttempts: userExist.loginAttempts+1})
+            UserMng.update(userExist._id, { codeAttempts: userExist.codeAttempts+1})
             
-            if (userExist.loginAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+            if (userExist.codeAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
                 UserMng.update(userExist._id, { lockUntil: Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS })
             }
 
             throw new AppError('El código o usuario no coincide', 401);
         }
 
-        await UserMng.update(userExist._id, { code: null, loginAttempts: 0, lockUntil: null});
+        await UserMng.update(userExist._id, { code: null, codeAttempts: 0, lockUntil: null});
 
         return userExist;
     } catch (error) {

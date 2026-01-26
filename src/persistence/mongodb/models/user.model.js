@@ -19,7 +19,11 @@ const UserSchema = new Schema({
     codeExpiresAt: {
         type: Date
     },
-    loginAttempts: {
+    codeAttempts: {
+        type: Number,
+        default: 0
+    },
+    mailAttempts: {
         type: Number,
         default: 0
     },

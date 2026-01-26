@@ -10,5 +10,6 @@ export default {
 
 export const LOGIN_SECURITY = {
   MAX_ATTEMPTS: Number(process.env.MAX_ATTEMPTS),
-  BLOCK_TIME_MS: Number(process.env.BLOCK_TIME_MS)
+  BLOCK_TIME_MS: Number(process.env.BLOCK_TIME_MS),
+  MAIL_ATTEMPTS: Number(process.env.MAIL_ATTEMPTS)
 }
