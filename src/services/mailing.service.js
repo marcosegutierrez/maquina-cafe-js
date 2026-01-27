@@ -15,7 +15,7 @@ const createMsgRegister = name =>
     `<div style="font-family: Arial">
       <h1>Hola ${name}, ¡Bienvenido/a al Ecomerce!</h1>
         <img 
-        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail_02.PNG" 
         alt="Firma de correo"
         width="350"
         />
@@ -25,7 +25,7 @@ const createMsgLastConnection = name =>
     `<div style="font-family: Arial">
       <p>Hola ${name}, su cuenta ha sido desactivada por inactividad, logeese para reactivar su cuenta.</p>
         <img 
-        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail_02.PNG" 
         alt="Firma de correo"
         width="350"
         />
@@ -35,7 +35,7 @@ const createMsgLogin = (name, code) =>
     `<div style="font-family: Arial">
       <p>Hola ${name}, este es su código para inicio de sesión ${code}.<br><br>El mismo expira en 5 minutos.</p>
         <img 
-        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail_02.PNG" 
         alt="Firma de correo"
         width="350"
         />
