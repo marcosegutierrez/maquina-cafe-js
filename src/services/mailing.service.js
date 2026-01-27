@@ -12,13 +12,34 @@ const transporter = createTransport({
 });
 
 const createMsgRegister = name => 
-    `<h1>Hola ${name}, ¡Bienvenido/a al Ecomerce!</h1>`;
+    `<div style="font-family: Arial">
+      <h1>Hola ${name}, ¡Bienvenido/a al Ecomerce!</h1>
+        <img 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        alt="Firma de correo"
+        width="350"
+        />
+      </div>`;
 
 const createMsgLastConnection = name =>
-    `<p>Hola ${name}, su cuenta ha sido desactivada por inactividad, logeese para reactivar su cuenta.</p>`
+    `<div style="font-family: Arial">
+      <p>Hola ${name}, su cuenta ha sido desactivada por inactividad, logeese para reactivar su cuenta.</p>
+        <img 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        alt="Firma de correo"
+        width="350"
+        />
+      </div>`;
 
 const createMsgLogin = (name, code) => 
-    `<p>Hola ${name}, este es su código para inicio de sesión ${code}.<br><br>El mismo expira en 5 minutos.</p>`
+    `<div style="font-family: Arial">
+      <p>Hola ${name}, este es su código para inicio de sesión ${code}.<br><br>El mismo expira en 5 minutos.</p>
+        <img 
+        src="https://raw.githubusercontent.com/marcosegutierrez/maquina-cafe-js/refs/heads/main/assets/email/firma_mail.PNG" 
+        alt="Firma de correo"
+        width="350"
+        />
+      </div>`;
 
 export const sendMail = async (user, service, code = 0) => {
     try {
