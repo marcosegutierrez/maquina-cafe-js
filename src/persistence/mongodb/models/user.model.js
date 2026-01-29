@@ -33,4 +33,14 @@ const UserSchema = new Schema({
     }
 })
 
+UserSchema.methods.registerMailAttempt = function() {
+    this.mailAttempts++;
+    return this.save();
+}
+
+UserSchema.methods.registerCodeAttempt = function() {
+    this.codeAttempts++;
+    return this.save();
+}
+
 export const UserModel = model('user', UserSchema);
