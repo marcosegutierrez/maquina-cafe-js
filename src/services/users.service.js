@@ -42,14 +42,15 @@ export const login = async (email) => {
             if (userExist.lockUntil && userExist.lockUntil > Date.now()) {
                 throw new AppError('Su cuenta está bloqueada debido a múltiples intentos fallidos. Intente nuevamente más tarde.', 423);
             }
-            if (userExist.mailAttempts >= LOGIN_SECURITY.MAX_MAILS) {
+            if (userExist.mailAttempts >= LOGIN_SECURITY.MAIL_ATTEMPTS) {
                 await UserMng.update(userExist.id, { lockUntil: Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS, mailAttempts: 0 });
                 throw new AppError('Demasiados intentos de envío de código. Su cuenta ha sido bloqueada temporalmente.', 423);
             }
             const code = generateCodeValidator();
             const expires = new Date(Date.now() + 5 * 60 * 1000);
             
-            await UserMng.update(userExist.id, { code, codeExpiresAt: expires, mailAttempts: userExist.mailAttempts + 1 });
+            await userExist.registerMailAttempt();
+            await UserMng.update(userExist.id, { code, codeExpiresAt: expires });
             await sendMail(userExist, 'login', code);
         }
 
@@ -73,19 +74,14 @@ export const loginValidator = async (email, access_code) => {
         }
 
         if (Date.now() > userExist.codeExpiresAt) {
-            UserMng.update(userExist._id, { codeAttempts: userExist.codeAttempts+1})
+            await userExist.registerCodeAttempt();
             throw new AppError('Código expirado', 401);
         }
 
         if ( !userExist ) {
             throw new AppError('El código o usuario no coincide', 401);
         } else if (userExist.code !== Number(access_code)) {
-            UserMng.update(userExist._id, { codeAttempts: userExist.codeAttempts+1})
-            
-            if (userExist.codeAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
-                UserMng.update(userExist._id, { lockUntil: Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS })
-            }
-
+            await userExist.registerCodeAttempt();
             throw new AppError('El código o usuario no coincide', 401);
         }
 

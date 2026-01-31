@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { LOGIN_SECURITY } from "../../../config.js";
 
 const UserSchema = new Schema({
     name: {
@@ -34,12 +35,22 @@ const UserSchema = new Schema({
 })
 
 UserSchema.methods.registerMailAttempt = function() {
+    if (this.lockUntil && this.lockUntil < Date.now()) {
+        this.lockUntil = null;
+        this.mailAttempts = 0;
+    }
     this.mailAttempts++;
+    if (this.mailAttempts >= LOGIN_SECURITY.MAIL_ATTEMPTS) {
+        this.lockUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
+    }
     return this.save();
 }
 
 UserSchema.methods.registerCodeAttempt = function() {
     this.codeAttempts++;
+    if (this.codeAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+        this.lockUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
+    }
     return this.save();
 }
 
