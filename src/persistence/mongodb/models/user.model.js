@@ -48,7 +48,7 @@ UserSchema.methods.registerMailAttempt = function() {
 
 UserSchema.methods.registerCodeAttempt = function() {
     this.codeAttempts++;
-    if (this.codeAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+    if (this.codeAttempts >= LOGIN_SECURITY.CODE_ATTEMPTS) {
         this.lockUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
     }
     return this.save();

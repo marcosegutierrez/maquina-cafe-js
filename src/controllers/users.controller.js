@@ -72,7 +72,7 @@ export const loginValidator = async (req, res, next) => {
 
         req.session.loginAttempts = (req.session.loginAttempts || 0) + 1;
 
-        if (req.session.loginAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+        if (req.session.loginAttempts >= LOGIN_SECURITY.CODE_ATTEMPTS) {
             req.session.blockedUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
         }
 
