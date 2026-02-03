@@ -27,17 +27,13 @@ export const login = async (req, res, next) => {
         }
 
         const { email } = req.body;
-        const userExist = await services.login(email);
-
-        if (!userExist) {
-            throw new AppError('Usuario no encontrado', 401);
-        }
+        await services.login(email);
 
         req.session.pendingEmail = email;
 
         return res.status(200).json({
             success: true,
-            message: 'Código de acceso enviado por mail'
+            message: 'Si el usuario existe se enviará un código de acceso a su email'
         });
 
     } catch (error) {
