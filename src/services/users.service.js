@@ -3,6 +3,7 @@ import { sendMail } from "./mailing.service.js";
 import { generateCodeValidator } from "../utils.js";
 import { AppError } from "../utils/errors.js";
 import { LOGIN_SECURITY } from "../config.js";
+import { resetAttemptsIfExpired } from "./helpers/authAttempts.helper.js";
 
 const UserMng = new UserManagerMongo();
 
@@ -46,6 +47,14 @@ export const login = async (email) => {
                 await UserMng.update(userExist.id, { lockUntil: Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS, mailAttempts: 0 });
                 throw new AppError('Demasiados intentos de envío de código. Su cuenta ha sido bloqueada temporalmente.', 423);
             }
+
+            resetAttemptsIfExpired(userExist);
+            await userExist.save();
+
+            if (!userExist.mailAttemptsAt) {
+                await UserMng.update(userExist.id, { mailAttemptsAt: new Date() });
+            }
+
             const code = generateCodeValidator();
             const expires = new Date(Date.now() + 5 * 60 * 1000);
             
@@ -64,6 +73,13 @@ export const login = async (email) => {
 export const loginValidator = async (email, access_code) => {
     try {
         const userExist = await UserMng.getByEmail(email);
+
+        resetAttemptsIfExpired(userExist);
+        await userExist.save();
+
+        if (!userExist.codeAttemptsAt) {
+            await UserMng.update(userExist.id, { codeAttemptsAt: new Date() });
+        }
 
         if (userExist.lockUntil) {
             if (userExist.lockUntil > Date.now()) {
@@ -85,7 +101,7 @@ export const loginValidator = async (email, access_code) => {
             throw new AppError('El código o usuario no coincide', 401);
         }
 
-        await UserMng.update(userExist._id, { code: null, codeAttempts: 0, mailAttempts: 0, lockUntil: null});
+        await UserMng.update(userExist._id, { code: null, codeAttempts: 0, lockUntil: null});
 
         return userExist;
     } catch (error) {

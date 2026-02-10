@@ -31,6 +31,14 @@ const UserSchema = new Schema({
     lockUntil: {
         type: Date,
         default: null
+    },
+    mailAttemptsAt: {
+        type: Date,
+        default: null
+    },
+    codeAttemptsAt: {
+        type: Date,
+        default: null
     }
 })
 
