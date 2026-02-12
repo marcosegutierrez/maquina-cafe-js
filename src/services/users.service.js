@@ -101,7 +101,7 @@ export const loginValidator = async (email, access_code) => {
             throw new AppError('El código o usuario no coincide', 401);
         }
 
-        await UserMng.update(userExist._id, { code: null, codeAttempts: 0, lockUntil: null});
+        await UserMng.update(userExist._id, { code: null, codeAttempts: 0, mailAttempts: 0, lockUntil: null});
 
         return userExist;
     } catch (error) {
