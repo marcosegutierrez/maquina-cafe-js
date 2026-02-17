@@ -20,8 +20,12 @@ const OrderSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ["active", "cancelled"],
-        default: "active"
+        enum: ["pending", "confirmed", "cancelled"],
+        default: "pending"
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
 })
 
