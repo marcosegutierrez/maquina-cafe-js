@@ -8,7 +8,7 @@ const router = Router();
 //Crea una orden
 router.post('/', userRateLimiter, controllers.createOrder);
 
-//Trae las ordenes de usuario logado
+//Trae las ordenes de usuario logeado
 router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
 
 //Trae orden por id

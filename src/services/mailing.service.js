@@ -66,7 +66,7 @@ export const sendMail = async (user, service, code = 0) => {
         };
 
         await transporter.sendMail(gmailOptions);
-        console.log(`Email enviado ${msg}`);
+        console.log(`Email enviado ${code}`);
 
     } catch (error) {
         throw new Error(error)

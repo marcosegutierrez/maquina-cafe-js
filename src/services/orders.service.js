@@ -1,4 +1,5 @@
 import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
+import { AppError } from "../utils/errors.js";
 
 const OrderMng = new OrderManagerMongo();
 
@@ -38,7 +39,10 @@ export const cancelOrder = async (orderId, userId) => {
 
         if ( !order ) return null;
         if ( order.userId?.toString() !== userId ) return null;
-        if ( order.status === 'cancelled' ) return null;
+        
+        if ( order.status !== 'pending' ) {
+            throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
+        }
         
         order.status = 'cancelled';
         await order.save();
