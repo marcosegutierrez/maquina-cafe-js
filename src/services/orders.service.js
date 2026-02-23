@@ -52,3 +52,19 @@ export const cancelOrder = async (orderId, userId) => {
         throw error;
     }
 }
+
+export const deleteOrder = async (orderId) => {
+    try {
+        const order = await OrderMng.getById(orderId);
+
+        if ( !order ) return null;
+        
+        order.deletedAt = Date.now();
+        await order.save();
+        return order;
+
+    } catch (error) {
+        console.error('[OrderService]', error);
+        throw error;
+    }
+}

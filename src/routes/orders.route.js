@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../middlewares/auth.js";
 import * as controllers from "../controllers/orders.controller.js";
 import { userRateLimiter } from "../middlewares/rateLimit.js";
 
@@ -16,5 +16,8 @@ router.get('/:id', userRateLimiter, controllers.getOrderById);
 
 //Cancela orden
 router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrder);
+
+//Eliminado lógico de orden
+router.delete('/:id', requireAdmin, userRateLimiter, controllers.deleteOrder);
 
 export default router;

@@ -1,4 +1,7 @@
 import { AppError } from "../utils/errors.js";
+import UserManagerMongo from "../persistence/mongodb/user.mng.js";
+
+const UserMng = new UserManagerMongo();
 
 export const requireAuth = (req, res, next) => {
     const last = req.session.lastActivity;
@@ -20,3 +23,27 @@ export const requireAuth = (req, res, next) => {
 
     next();
 };
+
+export const requireAdmin = async (req, res, next) => {
+    try {
+        if (!req.session?.userId) {
+            return res.status(401).json({
+                success: false,
+                message: "No autenticado"
+            });
+        }
+
+        const user = await UserMng.getById(req.session.userId);
+
+        if (!user || user.role !== "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "No autorizado"
+            });
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+}
