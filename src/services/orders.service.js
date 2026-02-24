@@ -68,3 +68,23 @@ export const deleteOrder = async (orderId) => {
         throw error;
     }
 }
+
+export const confirmOrder = async (orderId) => {
+    try {
+        const order = await OrderMng.getById(orderId);
+
+        if (!order) return null;
+
+        if (order.status !== 'pending') {
+            throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
+        }
+
+        order.status = 'confirmed';
+        await order.save();
+        return order;
+        
+    } catch (error) {
+        console.error('[OrderService]', error);
+        throw error;
+    }
+}

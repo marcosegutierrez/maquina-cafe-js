@@ -20,4 +20,7 @@ router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrde
 //Eliminado lógico de orden
 router.delete('/:id', requireAdmin, userRateLimiter, controllers.deleteOrder);
 
+//Confirmación de orden
+router.patch('/:id/confirm', requireAdmin, controllers.confirmOrder);
+
 export default router;

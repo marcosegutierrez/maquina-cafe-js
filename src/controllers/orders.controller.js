@@ -96,3 +96,23 @@ export const deleteOrder = async (req, res, next) => {
         next(error);
     }
 }
+
+export const confirmOrder = async (req, res, next) => {
+    try {
+        const orderId = req.params.id;
+        const order = await services.confirmOrder(orderId);
+        
+        if ( order === null ) {
+            return res.status(404).json({
+                success: false,
+                message: "Orden no encontrada o no disponible"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Orden confirmada exitosamente"
+        });
+    } catch (error) {
+        next(error);
+    }
+}
