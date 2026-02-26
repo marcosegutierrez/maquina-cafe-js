@@ -40,11 +40,12 @@ export const getOrders = async (req, res, next) => {
 export const getOrderById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const order = await services.getOrderById(id);
+        const { userId } = req.session;
+        const order = await services.getOrderById(id, userId);
         if ( !order ) {
             return res.status(404).json({
                 status: false,
-                message: "Orden no encontrada"
+                message: "Orden no encontrada o no disponible"
             });
         } 
         return res.status(200).json({

@@ -1,7 +1,9 @@
 import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
+import UserManagerMongo from "../persistence/mongodb/user.mng.js";
 import { AppError } from "../utils/errors.js";
 
 const OrderMng = new OrderManagerMongo();
+const UserMng = new UserManagerMongo();
 
 export const createOrder = async (newOrder, userId = null) => {
     try {
@@ -13,9 +15,13 @@ export const createOrder = async (newOrder, userId = null) => {
     }
 }
 
-export const getOrderById = async (orderId) => {
+export const getOrderById = async (orderId, userId = 0) => {
     try {
         const order = await OrderMng.getById(orderId);
+        const user = await UserMng.getById(userId);
+        if (user.role !== "admin") {
+            if ( order.userId?.toString() !== userId ) return null;
+        }
         return order;
     } catch (error) {
         console.error('[OrderService]', error);
