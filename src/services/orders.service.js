@@ -26,6 +26,7 @@ export const getOrderById = async (orderId, userId) => {
         
         if (user.role !== "admin") {
             if ( order.userId?.toString() !== userId ) return null;
+            if ( order.deletedAt !== null ) return null;
         }
         return order;
     } catch (error) {
