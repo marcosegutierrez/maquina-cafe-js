@@ -36,3 +36,5 @@ const AuditLogSchema = new Schema({
 }, {
     timestamps: true,
 })
+
+export const AuditLogModel = model('auditLog', AuditLogSchema);
