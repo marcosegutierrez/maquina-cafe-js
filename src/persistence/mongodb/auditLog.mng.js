@@ -1,6 +1,6 @@
 import { AuditLogModel } from "./models/auditLog.model.js";
 
-export default class auditLogMongo {
+export default class AuditLogMongo {
 
     async create(log, userId) {
         try {

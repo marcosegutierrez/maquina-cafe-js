@@ -80,7 +80,8 @@ export const cancelOrder = async (req, res, next) => {
 export const deleteOrder = async (req, res, next) => {
     try {
         const orderId = req.params.id;
-        const order = await services.deleteOrder(orderId);
+        const userId = req.session.userId;
+        const order = await services.deleteOrder(orderId, userId);
         
         if ( order === null ) {
             return res.status(404).json({

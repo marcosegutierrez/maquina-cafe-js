@@ -1,9 +1,11 @@
 import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
 import UserManagerMongo from "../persistence/mongodb/user.mng.js";
+import AuditLogMongo from "../persistence/mongodb/auditLog.mng.js";
 import { AppError } from "../utils/errors.js";
 
 const OrderMng = new OrderManagerMongo();
 const UserMng = new UserManagerMongo();
+const AuditLogMng = new AuditLogMongo();
 
 export const createOrder = async (newOrder, userId = null) => {
     try {
@@ -65,12 +67,27 @@ export const cancelOrder = async (orderId, userId) => {
     }
 }
 
-export const deleteOrder = async (orderId) => {
+export const deleteOrder = async (orderId, userId) => {
     try {
         const order = await OrderMng.getById(orderId);
-
-        if ( !order ) return null;
+        const user = await UserMng.getById(userId);
         
+        if ( !order ) return null;
+        if (user.role !== "admin") {
+            throw new AppError("Acción solo permitida para administrador", 400); ///
+        }
+        
+        const log = {
+            entity: 'order',
+            entityId: order._id,
+            action: "SOFT_DELETE",
+            from: order.status,
+            to: "SOFT_DELETE",
+            reason: "Borrado por motivo x"
+        }
+
+        await AuditLogMng.create(log, userId);
+
         order.deletedAt = Date.now();
         await order.save();
         return order;
