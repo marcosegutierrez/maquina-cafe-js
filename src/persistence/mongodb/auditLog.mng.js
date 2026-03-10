@@ -19,4 +19,12 @@ export default class AuditLogMongo {
         }
     }
 
+    async getAll() {
+        try {
+            return await AuditLogModel.find({});
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
 }

@@ -74,7 +74,7 @@ export const deleteOrder = async (orderId, userId) => {
         
         if ( !order ) return null;
         if (user.role !== "admin") {
-            throw new AppError("Acción solo permitida para administrador", 400); ///
+            throw new AppError("Acción solo permitida para administrador", 403);
         }
         
         const log = {
