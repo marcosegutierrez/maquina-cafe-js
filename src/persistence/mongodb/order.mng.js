@@ -18,9 +18,13 @@ export default class OrderManagerMongo {
         }
     }
 
-    async getByUserId(userId) {
+    async getByUserId(userId, page, limit, sort) {
         try {
-            return await OrderModel.find({ userId });
+            return await OrderModel.find({ userId })
+                .sort(sort)
+                .skip((Number(page) - 1) * limit)
+                .limit(Number(limit));
+            ;
         } catch (error) {
             throw new Error(error);
         }

@@ -37,9 +37,9 @@ export const getOrderById = async (orderId, userId) => {
     }
 }
 
-export const getOrders = async (userId) => {
+export const getOrders = async (userId, page = 1, limit = 10, sort = "-createdAt") => {
     try {
-        const orders = await OrderMng.getByUserId(userId);
+        const orders = await OrderMng.getByUserId(userId, page, limit, sort);
         return orders;
     } catch (error) {
         console.error('[OrderService]', error);

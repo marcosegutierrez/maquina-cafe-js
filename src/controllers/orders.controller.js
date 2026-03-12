@@ -21,7 +21,9 @@ export const createOrder = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
     try {
         const userId = req.session.userId;
-        const userOrders = await services.getOrders(userId);
+        const {page, limit, sort} = req.query;
+        const userOrders = await services.getOrders(userId, page, limit, sort);
+        
         if ( !userOrders || userOrders.length === 0 ) {
             return res.status(404).json({
                 success: false,
