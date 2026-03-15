@@ -20,11 +20,26 @@ export default class OrderManagerMongo {
 
     async getByUserId(userId, page, limit, sort) {
         try {
-            return await OrderModel.find({ userId })
+            page = Number(page);
+            limit = Number(limit);
+            const total = await OrderModel.countDocuments({ userId });
+            
+            const userOrders = await OrderModel.find({ userId })
                 .sort(sort)
-                .skip((Number(page) - 1) * limit)
-                .limit(Number(limit));
-            ;
+                .skip((page - 1) * limit)
+                .limit(limit);
+            
+            const totalPages = Math.ceil(total / limit);
+
+            const orders = {
+                page,
+                limit,
+                total,
+                totalPages,
+                data: userOrders
+            };
+
+            return orders;
         } catch (error) {
             throw new Error(error);
         }
