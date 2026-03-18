@@ -52,7 +52,11 @@ export const cancelOrder = async (orderId, userId) => {
         const order = await OrderMng.getById(orderId);
 
         if ( !order ) return null;
-        if ( order.userId?.toString() !== userId ) return null;
+        
+        if (user.role !== "admin") {
+            if ( order.userId?.toString() !== userId ) return null;
+            if ( order.deletedAt !== null ) return null;
+        }
         
         if ( order.status !== 'pending' ) {
             throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
