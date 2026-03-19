@@ -39,6 +39,21 @@ export const getOrders = async (req, res, next) => {
     }
 }
 
+export const getAllOrders = async (req, res, next) => {
+    try {
+        const {page, limit, sort, status} = req.query;
+        const orders = await services.getAllOrders(page, limit, sort, status);
+
+        return res.status(200).json({
+            success: true,
+            orders
+        }); 
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 export const getOrderById = async (req, res, next) => {
     try {
         const { id } = req.params;

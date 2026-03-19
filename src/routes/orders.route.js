@@ -11,6 +11,9 @@ router.post('/', userRateLimiter, controllers.createOrder);
 //Trae las ordenes de usuario logeado
 router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
 
+//Traer todas las ordenes (Admin)
+router.get('/all', requireAdmin, controllers.getAllOrders);
+
 //Trae orden por id
 router.get('/:id', userRateLimiter, controllers.getOrderById);
 

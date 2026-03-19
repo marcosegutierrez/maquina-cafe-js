@@ -2,9 +2,35 @@ import { OrderModel } from "./models/order.model.js";
 
 export default class OrderManagerMongo {
 
-    async getAll() {
+    async getAll(page, limit, sort, status) {
         try {
-            return await OrderModel.find({});
+            page = Number(page);
+            limit = Number(limit);
+
+            const query = {};
+
+            if (status) {
+                query.status = status;
+            }
+
+            const total = await OrderModel.countDocuments(query);
+            const search = await OrderModel.find(query)
+                .sort(sort)
+                .skip((page - 1) * limit)
+                .limit(limit);
+
+            const totalPages = Math.ceil(total / limit);
+
+            const orders = {
+                page,
+                limit,
+                total,
+                totalPages,
+                data: search
+            };
+
+            return orders;
+
         } catch (error) {
             throw new Error(error);
         }
@@ -23,12 +49,12 @@ export default class OrderManagerMongo {
             page = Number(page);
             limit = Number(limit);
             const total = await OrderModel.countDocuments({ userId });
-            
+
             const userOrders = await OrderModel.find({ userId })
                 .sort(sort)
                 .skip((page - 1) * limit)
                 .limit(limit);
-            
+
             const totalPages = Math.ceil(total / limit);
 
             const orders = {
@@ -40,6 +66,7 @@ export default class OrderManagerMongo {
             };
 
             return orders;
+
         } catch (error) {
             throw new Error(error);
         }
