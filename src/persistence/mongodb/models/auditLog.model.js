@@ -37,4 +37,6 @@ const AuditLogSchema = new Schema({
     timestamps: true,
 })
 
+AuditLogSchema.index({ entity: 1, entityId: 1, createdAt: -1 });
+
 export const AuditLogModel = model('auditLog', AuditLogSchema);
