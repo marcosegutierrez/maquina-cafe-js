@@ -1,4 +1,5 @@
 import swaggerJSDoc from "swagger-jsdoc";
+import { usersDocs } from "./users.docs.js";
 
 const options = {
   definition: {
@@ -13,8 +14,21 @@ const options = {
         url: "http://localhost:8080",
       },
     ],
+    components: {
+      schemas: {},
+    },
   },
-  apis: ["./src/routes/*.js"],
+  apis: [],
 };
 
-export const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options);
+
+swaggerSpec.paths = {
+  ...usersDocs.paths,
+};
+
+swaggerSpec.components.schemas = {
+  ...usersDocs.schemas,
+};
+
+export { swaggerSpec };
