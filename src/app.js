@@ -9,6 +9,8 @@ import { globalLimiter } from './middlewares/rateLimit.js';
 import helmet from 'helmet';
 import cors from 'cors';
 import { errorHandler } from './middlewares/errorHandler.js';
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./docs/swagger.js";
 
 const app = express();
 const PORT = 8080;
@@ -34,6 +36,7 @@ app
     .use(globalLimiter);
 
 app
+    .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
     .use('/api/v1', router)
     .use(errorHandler);
 
