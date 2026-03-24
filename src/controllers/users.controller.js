@@ -79,9 +79,11 @@ export const loginValidator = async (req, res, next) => {
 export const profile = async (req, res, next) => {
     try {
 
+        const user = await services.profile(req.session.userId);
+
         return res.status(200).json({
             success: true,
-            message: `Perfil del usuario con el id: ${req.session.userId}`
+            user
         });
 
     } catch (error) {

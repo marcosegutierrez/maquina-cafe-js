@@ -108,3 +108,20 @@ export const loginValidator = async (email, access_code) => {
         throw error;
     }
 }
+
+export const profile = async (userId) => {
+    try {
+        const user = await UserMng.getById(userId);
+        const userData = {
+            name: user.name,
+            nickname: user.nickname,
+            email: user.email,
+            role: user.role,
+            id: user.id
+        }
+        return userData;
+
+    } catch (error) {
+        throw error;
+    }
+}
