@@ -190,5 +190,113 @@ export const usersDocs = {
         },
       },
     },
+    "/api/v1/users/login-validator": {
+      post: {
+        summary: "Validar código de acceso",
+        description:
+          "Valida el código enviado al email del usuario para completar el proceso de login. Requiere que el usuario haya iniciado previamente el proceso en /login, donde se almacena el email en sesión. Incluye protección contra múltiples intentos fallidos.",
+        tags: ["Users"],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["access_code"],
+                properties: {
+                  access_code: {
+                    type: "string",
+                    example: "123456",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Login exitoso",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: {
+                      type: "boolean",
+                      example: true,
+                    },
+                    message: {
+                      type: "string",
+                      example: "Login Ok",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: "Sesión de login expirada o inválida",
+            content: {
+              "application/json": {
+                example: {
+                  success: false,
+                  message: "Sesión de login expirada",
+                },
+              },
+            },
+          },
+          401: {
+            description: "Código inválido o expirado",
+            content: {
+              "application/json": {
+                examples: {
+                  codigoIncorrecto: {
+                    summary: "Código incorrecto",
+                    value: {
+                      success: false,
+                      message: "El código o usuario no coincide",
+                    },
+                  },
+                  codigoExpirado: {
+                    summary: "Código expirado",
+                    value: {
+                      success: false,
+                      message: "Código expirado",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          423: {
+            description: "Cuenta bloqueada por intentos fallidos",
+            content: {
+              "application/json": {
+                example: {
+                  success: false,
+                  message:
+                    "Demasiados intentos fallidos. Intente más tarde.",
+                },
+              },
+            },
+          },
+          429: {
+            description: "Demasiados intentos (bloqueo temporal por sesión)",
+            content: {
+              "application/json": {
+                example: {
+                  success: false,
+                  message:
+                    "Demasiados intentos. Intente nuevamente más tarde.",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Error interno del servidor",
+          },
+        },
+      },
+    },
   },
 };
