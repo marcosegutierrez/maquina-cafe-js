@@ -8,10 +8,7 @@ export const requireAuth = (req, res, next) => {
     const MAX_IDLE = 1000 * 60 * 15; // 15 min
 
     if (!req.session.userId) {
-        return res.status(401).json({
-            success: false,
-            message: "No autenticado"
-        });
+        throw new AppError('No autenticado', 401);
     }
 
     if (last && Date.now() - last > MAX_IDLE) {

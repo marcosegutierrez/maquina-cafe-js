@@ -298,5 +298,98 @@ export const usersDocs = {
         },
       },
     },
+    "/api/v1/users/profile": {
+      get: {
+        summary: "Obtener perfil del usuario autenticado",
+        description:
+          "Devuelve la información del usuario autenticado. Requiere una sesión activa basada en cookies (connect.sid). La sesión expira luego de 15 minutos de inactividad. Incluye limitación de solicitudes por usuario.",
+        tags: ["Users"],
+        security: [
+          {
+            cookieAuth: [],
+          },
+        ],
+        responses: {
+          200: {
+            description: "Perfil del usuario",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: {
+                      type: "boolean",
+                      example: true,
+                    },
+                    user: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "John",
+                        },
+                        nickname: {
+                          type: "string",
+                          example: "johndev",
+                        },
+                        email: {
+                          type: "string",
+                          example: "john@gmail.com",
+                        },
+                        role: {
+                          type: "string",
+                          example: "user",
+                        },
+                        id: {
+                          type: "string",
+                          example: "507f1f77bcf86cd799439011",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: "No autenticado o sesión expirada",
+            content: {
+              "application/json": {
+                examples: {
+                  noAutenticado: {
+                    summary: "Usuario no autenticado",
+                    value: {
+                      success: false,
+                      message: "No autenticado",
+                    },
+                  },
+                  sesionExpirada: {
+                    summary: "Sesión expirada",
+                    value: {
+                      success: false,
+                      message: "Sesión expirada",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          429: {
+            description: "Demasiadas solicitudes",
+            content: {
+              "application/json": {
+                example: {
+                  success: false,
+                  message: "Demasiadas solicitudes, intentá más tarde",
+                },
+              },
+            },
+          },
+          500: {
+            description: "Error interno del servidor",
+          },
+        },
+      },
+    },
   },
 };

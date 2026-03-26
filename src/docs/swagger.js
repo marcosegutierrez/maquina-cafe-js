@@ -16,6 +16,13 @@ const options = {
     ],
     components: {
       schemas: {},
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "connect.sid",
+        },
+      },
     },
   },
   apis: [],
