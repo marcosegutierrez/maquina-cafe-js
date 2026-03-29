@@ -391,5 +391,41 @@ export const usersDocs = {
         },
       },
     },
+    "/api/v1/users/logout": {
+      post: {
+        summary: "Cerrar sesión",
+        description:
+          "Cierra la sesión del usuario eliminando la sesión activa y la cookie asociada. Si no existe una sesión activa, responde exitosamente igualmente.",
+        tags: ["Users"],
+        responses: {
+          200: {
+            description: "Sesión cerrada (o no existía sesión activa)",
+            content: {
+              "application/json": {
+                examples: {
+                  logoutExitoso: {
+                    summary: "Sesión cerrada correctamente",
+                    value: {
+                      success: true,
+                      message: "Sesión cerrada correctamente",
+                    },
+                  },
+                  sinSesion: {
+                    summary: "No había sesión activa",
+                    value: {
+                      success: true,
+                      message: "No había sesión activa",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: {
+            description: "Error interno del servidor",
+          },
+        },
+      },
+    },
   },
 };

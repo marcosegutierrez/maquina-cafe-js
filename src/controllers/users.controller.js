@@ -94,7 +94,7 @@ export const profile = async (req, res, next) => {
 export const logout = async (req, res, next) => {
     try {
 
-        if (!req.session) {
+        if (!req.session.userId) {
             return res.status(200).json({
                 success: true,
                 message: 'No había sesión activa'
