@@ -37,7 +37,7 @@ export const getOrderById = async (orderId, userId) => {
     }
 }
 
-export const getOrders = async (userId, page = 1, limit = 10, sort = "-createdAt") => {
+export const getOrders = async (userId, page = 1, limit = 10, sort = "-timestamp") => {
     try {
         const orders = await OrderMng.getByUserId(userId, page, limit, sort);
         return orders;
@@ -47,7 +47,7 @@ export const getOrders = async (userId, page = 1, limit = 10, sort = "-createdAt
     }
 }
 
-export const getAllOrders = async (page = 1, limit = 10, sort = "-createdAt", status) => {
+export const getAllOrders = async (page = 1, limit = 10, sort = "-timestamp", status) => {
     try {
         const orders = await OrderMng.getAll(page, limit, sort, status);
         return orders;
@@ -60,6 +60,7 @@ export const getAllOrders = async (page = 1, limit = 10, sort = "-createdAt", st
 export const cancelOrder = async (orderId, userId) => {
     try {
         const order = await OrderMng.getById(orderId);
+        const user = await UserMng.getById(userId);
 
         if ( !order ) return null;
         
