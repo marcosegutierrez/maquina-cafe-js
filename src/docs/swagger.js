@@ -1,5 +1,6 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import { usersDocs } from "./users.docs.js";
+import { ordersDocs } from "./orders.docs.js";
 
 const options = {
   definition: {
@@ -32,10 +33,12 @@ const swaggerSpec = swaggerJSDoc(options);
 
 swaggerSpec.paths = {
   ...usersDocs.paths,
+  ...ordersDocs.paths,
 };
 
 swaggerSpec.components.schemas = {
   ...usersDocs.schemas,
+  ...ordersDocs.schemas
 };
 
 export { swaggerSpec };
