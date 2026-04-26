@@ -24,6 +24,6 @@ router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrde
 router.delete('/:id', requireAdmin, userRateLimiter, controllers.deleteOrder);
 
 //Trae orden por id
-router.get('/:id', userRateLimiter, controllers.getOrderById);
+router.get('/:id', requireAuth, userRateLimiter, controllers.getOrderById);
 
 export default router;

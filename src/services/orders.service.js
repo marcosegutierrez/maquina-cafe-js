@@ -19,14 +19,10 @@ export const createOrder = async (newOrder, userId = null) => {
 
 export const getOrderById = async (orderId, userId) => {
     try {
-        if (!userId) {
-            throw new AppError("Debe ingresar con usuario logeado", 400);
-        }
-
         const order = await OrderMng.getById(orderId);
-        const user = await UserMng.getById(userId);
-        
         if (!order) return null;
+        
+        const user = await UserMng.getById(userId);
 
         if (user.role !== "admin") {
             if ( order.userId?.toString() !== userId ) return null;
