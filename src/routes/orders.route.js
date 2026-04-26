@@ -14,8 +14,8 @@ router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
 //Traer todas las ordenes (Admin)
 router.get('/all', requireAdmin, controllers.getAllOrders);
 
-//Trae orden por id
-router.get('/:id', userRateLimiter, controllers.getOrderById);
+//Confirmación de orden
+router.patch('/:id/confirm', requireAdmin, controllers.confirmOrder);
 
 //Cancela orden
 router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrder);
@@ -23,7 +23,7 @@ router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrde
 //Eliminado lógico de orden
 router.delete('/:id', requireAdmin, userRateLimiter, controllers.deleteOrder);
 
-//Confirmación de orden
-router.patch('/:id/confirm', requireAdmin, controllers.confirmOrder);
+//Trae orden por id
+router.get('/:id', userRateLimiter, controllers.getOrderById);
 
 export default router;
