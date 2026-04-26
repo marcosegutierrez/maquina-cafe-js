@@ -74,7 +74,103 @@ export const ordersDocs = {
                         description: "Error interno del servidor"
                     }
                 }
+            },
+        
+            get: {
+                summary: "Obtener órdenes del usuario autenticado",
+                tags: ["Orders"],
+                description: "Retorna las órdenes del usuario logueado con paginación y ordenamiento",
+
+                security: [
+                    {
+                        cookieAuth: []
+                    }
+                ],
+
+                parameters: [
+                    {
+                        name: "page",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 1
+                        }
+                    },
+                    {
+                        name: "limit",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 10
+                        }
+                    },
+                    {
+                        name: "sort",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "string",
+                            example: "-timestamp"
+                        },
+                        description: "Ordenamiento (ej: timestamp o -timestamp)"
+                    }
+                ],
+
+                responses: {
+                    200: {
+                        description: "Órdenes obtenidas correctamente",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean", example: true },
+                                        orders: {
+                                            type: "object",
+                                            properties: {
+                                                page: { type: "number", example: 1 },
+                                                limit: { type: "number", example: 10 },
+                                                total: { type: "number", example: 25 },
+                                                totalPages: { type: "number", example: 3 },
+                                                data: {
+                                                    type: "array",
+                                                    items: {
+                                                        type: "object",
+                                                        properties: {
+                                                            _id: { type: "string", example: "661f123abc" },
+                                                            drink: { type: "string", example: "latte" },
+                                                            sugar: { type: "number", example: 2 },
+                                                            status: { type: "string", example: "pending" },
+                                                            timestamp: {
+                                                                type: "string",
+                                                                example: "2026-04-25T15:00:00.000Z"
+                                                            },
+                                                            timestampFormatted: {
+                                                                type: "string",
+                                                                example: "25-04-2026 12:00 hs"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    401: {
+                        description: "No autenticado"
+                    },
+
+                    500: {
+                        description: "Error interno del servidor"
+                    }
+                }
             }
-        }
+        },
     }
 }

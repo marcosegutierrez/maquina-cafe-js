@@ -24,12 +24,12 @@ export const getOrders = async (req, res, next) => {
         const {page, limit, sort} = req.query;
         const userOrders = await services.getOrders(userId, page, limit, sort);
         
-        if ( !userOrders || userOrders.length === 0 ) {
-            return res.status(404).json({
-                success: false,
-                message: "No se encontraron órdenes"
-            });
-        }
+        // if ( !userOrders || userOrders.data.length === 0 ) {
+        //     return res.status(404).json({
+        //         success: false,
+        //         message: "No se encontraron órdenes"
+        //     });
+        // }
         return res.status(200).json({
             success: true,
             orders: userOrders
