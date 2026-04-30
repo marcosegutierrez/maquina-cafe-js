@@ -243,5 +243,166 @@ export const ordersDocs = {
                 }
             }
         },
+        "/api/v1/orders/all": {
+            get: {
+                summary: "Obtener todas las órdenes (Admin)",
+                tags: ["Orders"],
+                description: "Permite a un administrador obtener todas las órdenes con paginación, filtros y ordenamiento.",
+
+                security: [
+                    {
+                        cookieAuth: []
+                    }
+                ],
+
+                parameters: [
+                    {
+                        name: "page",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 1
+                        }
+                    },
+                    {
+                        name: "limit",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 10
+                        }
+                    },
+                    {
+                        name: "sort",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "string",
+                            example: "-timestamp"
+                        },
+                        description: "Ordenamiento de resultados"
+                    },
+                    {
+                        name: "status",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "string",
+                            enum: ["pending", "confirmed", "cancelled"],
+                            example: "pending"
+                        },
+                        description: "Filtrar órdenes por estado"
+                    }
+                ],
+
+                responses: {
+                    200: {
+                        description: "Órdenes obtenidas correctamente",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true
+                                        },
+
+                                        orders: {
+                                            type: "object",
+                                            properties: {
+                                                page: {
+                                                    type: "number",
+                                                    example: 1
+                                                },
+
+                                                limit: {
+                                                    type: "number",
+                                                    example: 10
+                                                },
+
+                                                total: {
+                                                    type: "number",
+                                                    example: 35
+                                                },
+
+                                                totalPages: {
+                                                    type: "number",
+                                                    example: 4
+                                                },
+
+                                                data: {
+                                                    type: "array",
+                                                    items: {
+                                                        type: "object",
+                                                        properties: {
+                                                            _id: {
+                                                                type: "string",
+                                                                example: "661f123abc"
+                                                            },
+
+                                                            drink: {
+                                                                type: "string",
+                                                                example: "espresso"
+                                                            },
+
+                                                            sugar: {
+                                                                type: "number",
+                                                                example: 1
+                                                            },
+
+                                                            status: {
+                                                                type: "string",
+                                                                example: "pending"
+                                                            },
+
+                                                            userId: {
+                                                                type: "string",
+                                                                nullable: true,
+                                                                example: "660a12bc"
+                                                            },
+
+                                                            timestamp: {
+                                                                type: "string",
+                                                                example: "2026-04-25T15:00:00.000Z"
+                                                            },
+
+                                                            timestampFormatted: {
+                                                                type: "string",
+                                                                example: "25-04-2026 12:00 hs"
+                                                            },
+
+                                                            deletedAt: {
+                                                                type: "string",
+                                                                nullable: true,
+                                                                example: null
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    401: {
+                        description: "No autenticado"
+                    },
+
+                    403: {
+                        description: "Acceso denegado. Se requieren permisos de administrador"
+                    },
+
+                    500: {
+                        description: "Error interno del servidor"
+                    }
+                }
+            }
+        }
     }
 }
