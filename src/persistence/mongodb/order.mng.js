@@ -1,17 +1,26 @@
 import { OrderModel } from "./models/order.model.js";
+import { AppError } from "../../utils/errors.js";
 
 export default class OrderManagerMongo {
 
     async getAll(page, limit, sort, status) {
         try {
+            const allowedStatus = ["pending", "confirmed", "cancelled"]
+
             page = Number(page);
             limit = Number(limit);
 
             const query = {};
 
             if (status) {
+                if (!allowedStatus.includes(status)) {
+                    throw new AppError("Estado inválido", 400);
+                }
+
                 query.status = status;
             }
+
+            if (limit < 1) limit = 10;
 
             const total = await OrderModel.countDocuments(query);
             const search = await OrderModel.find(query)
