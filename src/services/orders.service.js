@@ -116,8 +116,10 @@ export const confirmOrder = async (orderId) => {
         const order = await OrderMng.getById(orderId);
 
         if (!order) return null;
+        if (order.deletedAt) return null;
 
         if (order.status !== 'pending') {
+            if (order.status === 'confirmed') return order;
             throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
         }
 

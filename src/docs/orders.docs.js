@@ -403,6 +403,98 @@ export const ordersDocs = {
                     }
                 }
             }
+        },
+        "/api/v1/orders/{id}/confirm": {
+            patch: {
+                summary: "Confirmar una orden",
+                tags: ["Orders"],
+                description: "Permite a un administrador confirmar una orden pendiente. Si la orden ya está confirmada, devuelve Ok",
+
+                security: [
+                    {
+                        cookieAuth: []
+                    }
+                ],
+
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: {
+                            type: "string",
+                            example: "661f123abc"
+                        }
+                    }
+                ],
+
+                responses: {
+                    200: {
+                        description: "Orden confirmada exitosamente",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true
+                                        },
+
+                                        message: {
+                                            type: "string",
+                                            example: "Orden confirmada exitosamente"
+                                        },
+
+                                        order: {
+                                            type: "object",
+                                            properties: {
+                                                _id: { type: "string", example: "661f123abc" },
+                                                drink: { type: "string", example: "latte" },
+                                                sugar: { type: "number", example: 2 },
+                                                status: { type: "string", example: "pending" },
+                                                userId: {
+                                                    type: "string",
+                                                    nullable: true,
+                                                    example: "660a12bc"
+                                                },
+                                                timestamp: {
+                                                    type: "string",
+                                                    example: "2026-04-25T15:00:00.000Z"
+                                                },
+                                                timestampFormatted: {
+                                                    type: "string",
+                                                    example: "25-04-2026 12:00 hs"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    400: {
+                        description: "Solo se pueden confirmar órdenes pendientes"
+                    },
+
+                    401: {
+                        description: "No autenticado"
+                    },
+
+                    403: {
+                        description: "Acceso denegado. Se requieren permisos de administrador"
+                    },
+
+                    404: {
+                        description: "Orden no encontrada o no disponible"
+                    },
+
+                    500: {
+                        description: "Error interno del servidor"
+                    }
+                }
+            }
         }
     }
 }
