@@ -21,12 +21,12 @@ export const getOrderById = async (orderId, userId) => {
     try {
         const order = await OrderMng.getById(orderId);
         if (!order) return null;
-        
+
         const user = await UserMng.getById(userId);
 
         if (user.role !== "admin") {
-            if ( order.userId?.toString() !== userId ) return null;
-            if ( order.deletedAt !== null ) return null;
+            if (order.userId?.toString() !== userId) return null;
+            if (order.deletedAt !== null) return null;
         }
         return order;
     } catch (error) {
@@ -60,17 +60,20 @@ export const cancelOrder = async (orderId, userId) => {
         const order = await OrderMng.getById(orderId);
         const user = await UserMng.getById(userId);
 
-        if ( !order ) return null;
-        
+        if (!order) return null;
+
         if (user.role !== "admin") {
-            if ( order.userId?.toString() !== userId ) return null;
-            if ( order.deletedAt !== null ) return null;
+            if (order.userId?.toString() !== userId) return null;
+            if (order.deletedAt !== null) return null;
         }
-        
-        if ( order.status !== 'pending' ) {
+
+        if (order.status !== 'pending') {
+            if (order.status === 'cancelled') {
+                return order;
+            }
             throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
         }
-        
+
         order.status = 'cancelled';
         await order.save();
         return order;
@@ -84,12 +87,12 @@ export const deleteOrder = async (orderId, userId) => {
     try {
         const order = await OrderMng.getById(orderId);
         const user = await UserMng.getById(userId);
-        
-        if ( !order ) return null;
+
+        if (!order) return null;
         if (user.role !== "admin") {
             throw new AppError("Acción solo permitida para administrador", 403);
         }
-        
+
         const log = {
             entity: 'order',
             entityId: order._id,
@@ -126,7 +129,7 @@ export const confirmOrder = async (orderId) => {
         order.status = 'confirmed';
         await order.save();
         return order;
-        
+
     } catch (error) {
         console.error('[OrderService]', error);
         throw error;

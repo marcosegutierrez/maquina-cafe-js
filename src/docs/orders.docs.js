@@ -495,6 +495,71 @@ export const ordersDocs = {
                     }
                 }
             }
+        },
+        "/api/v1/orders/{id}/cancel": {
+            patch: {
+                summary: "Cancelar una orden",
+                tags: ["Orders"],
+                description: "Permite cancelar una orden pendiente. El usuario solo puede cancelar sus propias órdenes, excepto administradores.",
+
+                security: [
+                    {
+                        cookieAuth: []
+                    }
+                ],
+
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: {
+                            type: "string",
+                            example: "661f123abc"
+                        }
+                    }
+                ],
+
+                responses: {
+                    200: {
+                        description: "Orden cancelada exitosamente",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true
+                                        },
+
+                                        message: {
+                                            type: "string",
+                                            example: "Orden cancelada exitosamente"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    400: {
+                        description: "Solo se pueden cancelar órdenes pendientes"
+                    },
+
+                    401: {
+                        description: "No autenticado"
+                    },
+
+                    404: {
+                        description: "Orden no encontrada o no disponible"
+                    },
+
+                    500: {
+                        description: "Error interno del servidor"
+                    }
+                }
+            }
         }
     }
 }
