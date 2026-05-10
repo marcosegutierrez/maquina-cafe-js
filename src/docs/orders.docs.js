@@ -241,6 +241,70 @@ export const ordersDocs = {
                         description: "Error interno del servidor"
                     }
                 }
+            },
+
+            delete: {
+                summary: "Eliminar lógicamente una orden",
+                tags: ["Orders"],
+                description: "Permite a un administrador realizar un eliminado lógico de una orden. La orden no se elimina físicamente de la base de datos.",
+
+                security: [
+                    {
+                        cookieAuth: []
+                    }
+                ],
+
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: {
+                            type: "string",
+                            example: "661f123abc"
+                        }
+                    }
+                ],
+
+                responses: {
+                    200: {
+                        description: "Orden eliminada exitosamente",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true
+                                        },
+
+                                        message: {
+                                            type: "string",
+                                            example: "Orden eliminada exitosamente"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    401: {
+                        description: "No autenticado"
+                    },
+
+                    403: {
+                        description: "Acceso denegado. Se requieren permisos de administrador"
+                    },
+
+                    404: {
+                        description: "Orden no encontrada o no disponible"
+                    },
+
+                    500: {
+                        description: "Error interno del servidor"
+                    }
+                }
             }
         },
         "/api/v1/orders/all": {

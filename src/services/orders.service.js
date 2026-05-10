@@ -93,6 +93,10 @@ export const deleteOrder = async (orderId, userId) => {
             throw new AppError("Acción solo permitida para administrador", 403);
         }
 
+        if (order.deletedAt) {
+            return order;
+        }
+
         const log = {
             entity: 'order',
             entityId: order._id,
