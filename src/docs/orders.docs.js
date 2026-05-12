@@ -248,6 +248,24 @@ export const ordersDocs = {
                 tags: ["Orders"],
                 description: "Permite a un administrador realizar un eliminado lógico de una orden. La orden no se elimina físicamente de la base de datos.",
 
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                required: ["reason"],
+                                properties: {
+                                    reason: {
+                                        type: "string",
+                                        example: "Orden de prueba"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
                 security: [
                     {
                         cookieAuth: []

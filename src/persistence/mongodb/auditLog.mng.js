@@ -21,7 +21,7 @@ export default class AuditLogMongo {
 
     async getAll() {
         try {
-            return await AuditLogModel.find({});
+            return await AuditLogModel.find({}).sort("-createdAt");
         } catch (error) {
             throw new Error(error);
         }

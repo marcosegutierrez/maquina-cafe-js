@@ -98,7 +98,7 @@ export const deleteOrder = async (req, res, next) => {
     try {
         const orderId = req.params.id;
         const userId = req.session.userId;
-        const order = await services.deleteOrder(orderId, userId);
+        const order = await services.deleteOrder(orderId, userId, req.body.reason);
         
         if ( order === null ) {
             return res.status(404).json({

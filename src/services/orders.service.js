@@ -83,7 +83,7 @@ export const cancelOrder = async (orderId, userId) => {
     }
 }
 
-export const deleteOrder = async (orderId, userId) => {
+export const deleteOrder = async (orderId, userId, reason) => {
     try {
         const order = await OrderMng.getById(orderId);
         const user = await UserMng.getById(userId);
@@ -103,7 +103,7 @@ export const deleteOrder = async (orderId, userId) => {
             action: "SOFT_DELETE",
             from: order.status,
             to: "SOFT_DELETE",
-            reason: "Borrado por motivo x"
+            reason
         }
 
         await AuditLogMng.create(log, userId);
