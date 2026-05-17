@@ -191,7 +191,7 @@ export const ordersDocs = {
                         required: true,
                         schema: {
                             type: "string",
-                            example: "661f123abc"
+                            example: "661f1a2b3c4d5e6f7a8b9c0d"
                         }
                     }
                 ],
@@ -208,11 +208,11 @@ export const ordersDocs = {
                                         order: {
                                             type: "object",
                                             properties: {
-                                                _id: { type: "string", example: "661f123abc" },
+                                                _id: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
                                                 drink: { type: "string", example: "latte" },
                                                 sugar: { type: "number", example: 2 },
                                                 status: { type: "string", example: "pending" },
-                                                userId: { type: "string", example: "660a12bc" },
+                                                userId: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
                                                 timestamp: {
                                                     type: "string",
                                                     example: "2026-04-25T15:00:00.000Z"
@@ -227,6 +227,10 @@ export const ordersDocs = {
                                 }
                             }
                         }
+                    },
+
+                    400: {
+                        description: "El parámetro ingresado no es un ObjectId válido"
                     },
 
                     401: {

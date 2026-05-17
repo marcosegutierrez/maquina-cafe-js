@@ -2,6 +2,7 @@ import { Router } from "express";
 import { requireAdmin, requireAuth } from "../middlewares/auth.js";
 import * as controllers from "../controllers/orders.controller.js";
 import { userRateLimiter } from "../middlewares/rateLimit.js";
+import { validateObjectId } from "../middlewares/validateObjectId.js";
 
 const router = Router();
 
@@ -15,15 +16,15 @@ router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
 router.get('/all', requireAdmin, controllers.getAllOrders);
 
 //Confirmación de orden
-router.patch('/:id/confirm', requireAdmin, controllers.confirmOrder);
+router.patch('/:id/confirm', validateObjectId(), requireAdmin, controllers.confirmOrder);
 
 //Cancela orden
-router.patch('/:id/cancel', requireAuth, userRateLimiter, controllers.cancelOrder);
+router.patch('/:id/cancel', validateObjectId(), requireAuth, userRateLimiter, controllers.cancelOrder);
 
 //Eliminado lógico de orden
-router.delete('/:id', requireAdmin, userRateLimiter, controllers.deleteOrder);
+router.delete('/:id', validateObjectId(), requireAdmin, userRateLimiter, controllers.deleteOrder);
 
 //Trae orden por id
-router.get('/:id', requireAuth, userRateLimiter, controllers.getOrderById);
+router.get('/:id', validateObjectId(), requireAuth, userRateLimiter, controllers.getOrderById);
 
 export default router;
