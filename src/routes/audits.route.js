@@ -9,12 +9,7 @@ router.get('/', requireAuth, requireAdmin, async (req, res, next) => {
     try {
         const logs = await AuditLogMng.getAll();
 
-        if (!logs || logs.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No se encontraron logs"
-            });
-        }
+        // Devuelve recurso existente vacío o con logs
         return res.status(200).json({
             success: true,
             logs: logs

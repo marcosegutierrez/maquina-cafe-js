@@ -244,7 +244,7 @@ export const ordersDocs = {
             },
 
             delete: {
-                summary: "Eliminar lógicamente una orden",
+                summary: "Eliminar lógicamente una orden (Admin)",
                 tags: ["Orders"],
                 description: "Permite a un administrador realizar un eliminado lógico de una orden. La orden no se elimina físicamente de la base de datos.",
 
