@@ -16,7 +16,7 @@ export const ordersDocs = {
                                 properties: {
                                     drink: {
                                         type: "string",
-                                        example: "latte"
+                                        example: "Latte"
                                     },
                                     sugar: {
                                         type: "number",
@@ -41,20 +41,16 @@ export const ordersDocs = {
                                         order: {
                                             type: "object",
                                             properties: {
-                                                _id: { type: "string", example: "661f123abc" },
-                                                drink: { type: "string", example: "latte" },
+                                                id: { type: "string", example: "661f123abc" },
+                                                drink: { type: "string", example: "Latte" },
                                                 sugar: { type: "number", example: 2 },
-                                                status: { type: "string", example: "pending" },
                                                 userId: {
                                                     type: "string",
                                                     nullable: true,
                                                     example: "660a12bc"
                                                 },
+                                                status: { type: "string", example: "pending" },
                                                 timestamp: {
-                                                    type: "string",
-                                                    example: "2026-04-25T15:00:00.000Z"
-                                                },
-                                                timestampFormatted: {
                                                     type: "string",
                                                     example: "25-04-2026 12:00 hs"
                                                 }

@@ -1,17 +1,18 @@
 import * as services from "../services/orders.service.js";
+import { serializeOrder } from "../serializers/order.serializer.js";
 
 export const createOrder = async (req, res, next) => {
     try {
-        let orderData;
+        let order;
         if ( req.session.userId ) {
-            orderData = await services.createOrder(req.body, req.session.userId);
+            order = await services.createOrder(req.body, req.session.userId);
         } else {
-            orderData = await services.createOrder(req.body); // Invitado
+            order = await services.createOrder(req.body); // Invitado
         }
         return res.status(201).json({
             success: true,
             message: "Orden creada exitosamente",
-            order: orderData
+            order: serializeOrder(order)
         });
     } catch (error) {
         next(error);
