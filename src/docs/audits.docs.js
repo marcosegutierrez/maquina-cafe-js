@@ -12,6 +12,37 @@ export const auditsDocs = {
                     }
                 ],
 
+                parameters: [
+                    {
+                        name: "page",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 1
+                        }
+                    },
+                    {
+                        name: "limit",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "number",
+                            example: 10
+                        }
+                    },
+                    {
+                        name: "sort",
+                        in: "query",
+                        required: false,
+                        schema: {
+                            type: "string",
+                            example: "-createdAt"
+                        },
+                        description: "Ordenamiento (ej: createdAt o -createdAt)"
+                    }
+                ],
+
                 responses: {
                     200: {
                         description: "Logs obtenidos correctamente",
@@ -26,58 +57,64 @@ export const auditsDocs = {
                                         },
 
                                         logs: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                        example: "662abc123"
-                                                    },
+                                            type: "object",
+                                            properties: {
+                                                page: { type: "number", example: 1 },
+                                                limit: { type: "number", example: 10 },
+                                                total: { type: "number", example: 25 },
+                                                totalPages: { type: "number", example: 3 },
+                                                data: {
+                                                    type: "array",
+                                                    items: {
+                                                        _id: {
+                                                            type: "string",
+                                                            example: "662abc123"
+                                                        },
 
-                                                    entity: {
-                                                        type: "string",
-                                                        example: "order"
-                                                    },
+                                                        entity: {
+                                                            type: "string",
+                                                            example: "order"
+                                                        },
 
-                                                    entityId: {
-                                                        type: "string",
-                                                        example: "661f123abc"
-                                                    },
+                                                        entityId: {
+                                                            type: "string",
+                                                            example: "661f123abc"
+                                                        },
 
-                                                    action: {
-                                                        type: "string",
-                                                        example: "SOFT_DELETE"
-                                                    },
+                                                        action: {
+                                                            type: "string",
+                                                            example: "SOFT_DELETE"
+                                                        },
 
-                                                    from: {
-                                                        type: "string",
-                                                        example: "pending"
-                                                    },
+                                                        from: {
+                                                            type: "string",
+                                                            example: "pending"
+                                                        },
 
-                                                    to: {
-                                                        type: "string",
-                                                        example: "SOFT_DELETE"
-                                                    },
+                                                        to: {
+                                                            type: "string",
+                                                            example: "SOFT_DELETE"
+                                                        },
 
-                                                    performedBy: {
-                                                        type: "string",
-                                                        example: "660admin123"
-                                                    },
+                                                        performedBy: {
+                                                            type: "string",
+                                                            example: "660admin123"
+                                                        },
 
-                                                    reason: {
-                                                        type: "string",
-                                                        example: "Borrado de orden duplicada"
-                                                    },
+                                                        reason: {
+                                                            type: "string",
+                                                            example: "Borrado de orden duplicada"
+                                                        },
 
-                                                    createdAt: {
-                                                        type: "string",
-                                                        example: "2026-05-15T18:30:00.000Z"
-                                                    },
+                                                        createdAt: {
+                                                            type: "string",
+                                                            example: "2026-05-15T18:30:00.000Z"
+                                                        },
 
-                                                    updatedAt: {
-                                                        type: "string",
-                                                        example: "2026-05-15T18:30:00.000Z"
+                                                        updatedAt: {
+                                                            type: "string",
+                                                            example: "2026-05-15T18:30:00.000Z"
+                                                        }
                                                     }
                                                 }
                                             }
@@ -85,19 +122,19 @@ export const auditsDocs = {
                                     }
                                 }
                             }
+                        },
+
+                        401: {
+                            description: "No autenticado"
+                        },
+
+                        403: {
+                            description: "Acceso denegado. Se requieren permisos de administrador"
+                        },
+
+                        500: {
+                            description: "Error interno del servidor"
                         }
-                    },
-
-                    401: {
-                        description: "No autenticado"
-                    },
-
-                    403: {
-                        description: "Acceso denegado. Se requieren permisos de administrador"
-                    },
-
-                    500: {
-                        description: "Error interno del servidor"
                     }
                 }
             }
