@@ -57,9 +57,14 @@ export default class OrderManagerMongo {
         try {
             page = Number(page);
             limit = Number(limit);
-            const total = await OrderModel.countDocuments({ userId });
+            const query = {
+                userId,
+                deletedAt: null
+            }
 
-            const userOrders = await OrderModel.find({ userId })
+            const total = await OrderModel.countDocuments(query);
+
+            const userOrders = await OrderModel.find(query)
                 .sort(sort)
                 .skip((page - 1) * limit)
                 .limit(limit);
