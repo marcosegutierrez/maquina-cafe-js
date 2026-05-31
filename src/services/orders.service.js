@@ -1,9 +1,9 @@
-import OrderManagerMongo from "../persistence/mongodb/order.mng.js";
+import OrderRepository from "../persistence/mongodb/repositories/order.repository.js";
 import UserManagerMongo from "../persistence/mongodb/user.mng.js";
 import AuditLogMongo from "../persistence/mongodb/auditLog.mng.js";
 import { AppError } from "../utils/errors.js";
 
-const OrderMng = new OrderManagerMongo();
+const OrderMng = new OrderRepository();
 const UserMng = new UserManagerMongo();
 const AuditLogMng = new AuditLogMongo();
 

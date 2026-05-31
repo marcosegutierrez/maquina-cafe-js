@@ -1,7 +1,7 @@
-import { OrderModel } from "./models/order.model.js";
-import { AppError } from "../../utils/errors.js";
+import { OrderModel } from "../models/order.model.js"
+import { AppError } from "../../../utils/errors.js"
 
-export default class OrderManagerMongo {
+export default class OrderRepository {
 
     async getAll(page, limit, sort, status) {
         try {
