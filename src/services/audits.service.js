@@ -1,6 +1,6 @@
-import AuditLogMongo from '../persistence/mongodb/auditLog.mng.js';
+import AuditLogRepository from "../persistence/mongodb/repositories/auditLog.repository.js";
 
-const AuditLogMng = new AuditLogMongo();
+const AuditLogMng = new AuditLogRepository();
 
 export const getAuditsLogs = async (page = 1, limit = 10, sort = "-createdAt") => {
     try {

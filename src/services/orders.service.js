@@ -1,11 +1,11 @@
 import OrderRepository from "../persistence/mongodb/repositories/order.repository.js";
 import UserManagerMongo from "../persistence/mongodb/user.mng.js";
-import AuditLogMongo from "../persistence/mongodb/auditLog.mng.js";
+import AuditLogRepository from "../persistence/mongodb/repositories/auditLog.repository.js";
 import { AppError } from "../utils/errors.js";
 
 const OrderMng = new OrderRepository();
 const UserMng = new UserManagerMongo();
-const AuditLogMng = new AuditLogMongo();
+const AuditLogMng = new AuditLogRepository();
 
 export const createOrder = async (newOrder, userId = null) => {
     try {
