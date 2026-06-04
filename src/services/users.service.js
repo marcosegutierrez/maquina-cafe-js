@@ -1,11 +1,11 @@
-import UserManagerMongo from "../persistence/mongodb/user.mng.js";
+import UserRepository from "../persistence/mongodb/repositories/user.repository.js";
 import { sendMail } from "./mailing.service.js";
 import { generateCodeValidator } from "../utils.js";
 import { AppError } from "../utils/errors.js";
 import { LOGIN_SECURITY } from "../config.js";
 import { resetAttemptsIfExpired } from "./helpers/authAttempts.helper.js";
 
-const UserMng = new UserManagerMongo();
+const UserMng = new UserRepository();
 
 export const register = async (data) => {
     try {

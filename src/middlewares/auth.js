@@ -1,7 +1,6 @@
 import { AppError } from "../utils/errors.js";
-import UserManagerMongo from "../persistence/mongodb/user.mng.js";
-
-const UserMng = new UserManagerMongo();
+import UserRepository from "../persistence/mongodb/repositories/user.repository.js";
+const UserMng = new UserRepository();
 
 export const requireAuth = (req, res, next) => {
     const last = req.session.lastActivity;
