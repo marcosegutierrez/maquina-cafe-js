@@ -75,9 +75,12 @@ export const cancelOrder = async (orderId, userId) => {
             throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
         }
 
-        order.status = 'cancelled';
-        await order.save();
+        await OrderMng.update(orderId, {
+            status: 'cancelled'
+        });
+
         return order;
+
     } catch (error) {
         console.error('[OrderService]', error);
         throw error;
@@ -105,8 +108,10 @@ export const deleteOrder = async (orderId, userId, reason) => {
 
         await AuditLogMng.create(log, userId);
 
-        order.deletedAt = Date.now();
-        await order.save();
+        await OrderMng.update(orderId, {
+            deletedAt: Date.now()
+        });
+
         return order;
 
     } catch (error) {
@@ -127,8 +132,10 @@ export const confirmOrder = async (orderId) => {
             throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
         }
 
-        order.status = 'confirmed';
-        await order.save();
+        await OrderMng.update(orderId, {
+            status: 'confirmed'
+        });
+
         return order;
 
     } catch (error) {
