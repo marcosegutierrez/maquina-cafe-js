@@ -62,6 +62,7 @@ export const cancelOrder = async (orderId, userId) => {
 
         if (!order) return null;
 
+        // Admin o usuario de la orden pueden cancelarla
         if (user.role !== "admin") {
             if (order.userId?.toString() !== userId) return null;
             if (order.deletedAt !== null) return null;
@@ -86,12 +87,8 @@ export const cancelOrder = async (orderId, userId) => {
 export const deleteOrder = async (orderId, userId, reason) => {
     try {
         const order = await OrderMng.getById(orderId);
-        const user = await UserMng.getById(userId);
 
         if (!order) return null;
-        if (user.role !== "admin") {
-            throw new AppError("Acción solo permitida para administrador", 403);
-        }
 
         if (order.deletedAt) {
             return order;
