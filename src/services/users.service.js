@@ -18,16 +18,9 @@ export const register = async (data) => {
 
         const user = await UserMng.create(data);
         
-        const userData = {
-            name: user.name,
-            nickname: user.nickname,
-            email: user.email,
-            id: user.id
-        }
-
         await sendMail(user, 'register');
 
-        return userData;
+        return user;
 
     } catch (error) {
         console.error('[UserService]', error);
@@ -112,14 +105,7 @@ export const loginValidator = async (email, access_code) => {
 export const profile = async (userId) => {
     try {
         const user = await UserMng.getById(userId);
-        const userData = {
-            name: user.name,
-            nickname: user.nickname,
-            email: user.email,
-            role: user.role,
-            id: user.id
-        }
-        return userData;
+        return user;
 
     } catch (error) {
         throw error;

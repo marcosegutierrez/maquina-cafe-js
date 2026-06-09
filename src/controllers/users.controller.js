@@ -2,6 +2,7 @@ import * as services from "../services/users.service.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../utils/errors.js";
 import { LOGIN_SECURITY } from "../config.js";
+import { serializeUser } from "../serializers/user.serializer.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -10,7 +11,7 @@ export const register = async (req, res, next) => {
         return res.status(201).json({
             success: true,
             message: `Usuario registrado correctamente`,
-            user: user
+            user: serializeUser(user)
         });
 
     } catch (error) {
@@ -83,7 +84,7 @@ export const profile = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            user
+            user: serializeUser(user)
         });
 
     } catch (error) {
