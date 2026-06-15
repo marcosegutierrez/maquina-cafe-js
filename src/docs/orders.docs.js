@@ -207,13 +207,9 @@ export const ordersDocs = {
                                                 _id: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
                                                 drink: { type: "string", example: "latte" },
                                                 sugar: { type: "number", example: 2 },
-                                                status: { type: "string", example: "pending" },
                                                 userId: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
+                                                status: { type: "string", example: "pending" },
                                                 timestamp: {
-                                                    type: "string",
-                                                    example: "2026-04-25T15:00:00.000Z"
-                                                },
-                                                timestampFormatted: {
                                                     type: "string",
                                                     example: "25-04-2026 12:00 hs"
                                                 }

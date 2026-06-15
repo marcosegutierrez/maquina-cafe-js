@@ -132,11 +132,11 @@ export const confirmOrder = async (orderId) => {
             throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
         }
 
-        await OrderMng.update(orderId, {
+        const updatedOrder = await OrderMng.update(orderId, {
             status: 'confirmed'
         });
 
-        return order;
+        return updatedOrder;
 
     } catch (error) {
         console.error('[OrderService]', error);

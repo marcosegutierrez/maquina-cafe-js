@@ -51,10 +51,6 @@ export const usersDocs = {
                     user: {
                       type: "object",
                       properties: {
-                        id: {
-                          type: "string",
-                          example: "507f1f77bcf86cd799439011",
-                        },
                         name: {
                           type: "string",
                           example: "John",
@@ -66,6 +62,14 @@ export const usersDocs = {
                         email: {
                           type: "string",
                           example: "john@gmail.com",
+                        },
+                        role: {
+                          type: "string",
+                          example: "user",
+                        },
+                        id: {
+                          type: "string",
+                          example: "507f1f77bcf86cd799439011",
                         },
                       },
                     },
