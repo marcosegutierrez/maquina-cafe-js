@@ -484,7 +484,7 @@ export const ordersDocs = {
         },
         "/api/v1/orders/{id}/confirm": {
             patch: {
-                summary: "Confirmar una orden",
+                summary: "Confirmar una orden (Admin)",
                 tags: ["Orders"],
                 description: "Permite a un administrador confirmar una orden pendiente. Si la orden ya está confirmada, devuelve Ok",
 
@@ -501,7 +501,7 @@ export const ordersDocs = {
                         required: true,
                         schema: {
                             type: "string",
-                            example: "661f123abc"
+                            example: "661f1a2b3c4d5e6f7a8b9c0d"
                         }
                     }
                 ],
@@ -527,20 +527,16 @@ export const ordersDocs = {
                                         order: {
                                             type: "object",
                                             properties: {
-                                                _id: { type: "string", example: "661f123abc" },
-                                                drink: { type: "string", example: "latte" },
+                                                _id: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
+                                                drink: { type: "string", example: "Latte" },
                                                 sugar: { type: "number", example: 2 },
-                                                status: { type: "string", example: "pending" },
                                                 userId: {
                                                     type: "string",
                                                     nullable: true,
-                                                    example: "660a12bc"
+                                                    example: "661f1a2b3c4d5e6f7a8b9c0d"
                                                 },
+                                                status: { type: "string", example: "confirmed" },
                                                 timestamp: {
-                                                    type: "string",
-                                                    example: "2026-04-25T15:00:00.000Z"
-                                                },
-                                                timestampFormatted: {
                                                     type: "string",
                                                     example: "25-04-2026 12:00 hs"
                                                 }
@@ -593,7 +589,7 @@ export const ordersDocs = {
                         required: true,
                         schema: {
                             type: "string",
-                            example: "661f123abc"
+                            example: "661f1a2b3c4d5e6f7a8b9c0d"
                         }
                     }
                 ],
