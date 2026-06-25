@@ -24,10 +24,15 @@ export const getOrders = async (req, res, next) => {
         const userId = req.session.userId;
         const {page, limit, sort} = req.query;
         const userOrders = await services.getOrders(userId, page, limit, sort);
+
+        const serializedOrders = {
+            ...userOrders,
+            data: userOrders.data.map(order => serializeOrder(order))
+        };
         
         return res.status(200).json({
             success: true,
-            orders: userOrders
+            orders: serializedOrders
         });        
     } catch (error) {
         next(error);
@@ -39,9 +44,14 @@ export const getAllOrders = async (req, res, next) => {
         const {page, limit, sort, status} = req.query;
         const orders = await services.getAllOrders(page, limit, sort, status);
 
+        const serializedOrders = {
+            ...orders,
+            data: orders.data.map(order => serializeOrder(order))
+        };
+
         return res.status(200).json({
             success: true,
-            orders
+            orders: serializedOrders
         }); 
 
     } catch (error) {

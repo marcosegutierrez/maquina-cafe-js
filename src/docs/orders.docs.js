@@ -135,15 +135,16 @@ export const ordersDocs = {
                                                     items: {
                                                         type: "object",
                                                         properties: {
-                                                            _id: { type: "string", example: "661f123abc" },
-                                                            drink: { type: "string", example: "latte" },
+                                                            _id: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
+                                                            drink: { type: "string", example: "Latte" },
                                                             sugar: { type: "number", example: 2 },
-                                                            status: { type: "string", example: "pending" },
-                                                            timestamp: {
+                                                            userId: {
                                                                 type: "string",
-                                                                example: "2026-04-25T15:00:00.000Z"
+                                                                nullable: true,
+                                                                example: "661f1a2b3c4d5e6f7a8b9c0d"
                                                             },
-                                                            timestampFormatted: {
+                                                            status: { type: "string", example: "confirmed" },
+                                                            timestamp: {
                                                                 type: "string",
                                                                 example: "25-04-2026 12:00 hs"
                                                             }
@@ -416,46 +417,18 @@ export const ordersDocs = {
                                                     items: {
                                                         type: "object",
                                                         properties: {
-                                                            _id: {
-                                                                type: "string",
-                                                                example: "661f123abc"
-                                                            },
-
-                                                            drink: {
-                                                                type: "string",
-                                                                example: "espresso"
-                                                            },
-
-                                                            sugar: {
-                                                                type: "number",
-                                                                example: 1
-                                                            },
-
-                                                            status: {
-                                                                type: "string",
-                                                                example: "pending"
-                                                            },
-
+                                                            _id: { type: "string", example: "661f1a2b3c4d5e6f7a8b9c0d" },
+                                                            drink: { type: "string", example: "Latte" },
+                                                            sugar: { type: "number", example: 2 },
                                                             userId: {
                                                                 type: "string",
                                                                 nullable: true,
-                                                                example: "660a12bc"
+                                                                example: "661f1a2b3c4d5e6f7a8b9c0d"
                                                             },
-
+                                                            status: { type: "string", example: "confirmed" },
                                                             timestamp: {
                                                                 type: "string",
-                                                                example: "2026-04-25T15:00:00.000Z"
-                                                            },
-
-                                                            timestampFormatted: {
-                                                                type: "string",
                                                                 example: "25-04-2026 12:00 hs"
-                                                            },
-
-                                                            deletedAt: {
-                                                                type: "string",
-                                                                nullable: true,
-                                                                example: null
                                                             }
                                                         }
                                                     }
