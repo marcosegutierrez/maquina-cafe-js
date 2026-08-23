@@ -40,6 +40,10 @@ app
     .use('/api/v1', router)
     .use(errorHandler);
 
-initMongoDB();
+const startServer = async () => {
+    await initMongoDB();
 
-app.listen(PORT, () => console.log(`Server Ok on port ${PORT}`));
+    app.listen(PORT, () => console.log(`Server Ok on port ${PORT}`));
+}
+
+startServer();
