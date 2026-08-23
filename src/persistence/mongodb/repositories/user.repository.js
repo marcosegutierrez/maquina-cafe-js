@@ -3,35 +3,19 @@ import { UserModel } from "../models/user.model.js";
 export default class UserRepository {
 
     async create(obj) {
-        try {
-            return await UserModel.create(obj);
-        } catch (error) {
-            throw new Error(error);
-        }
+        return await UserModel.create(obj);
     }
 
     async getById(id) {
-        try {
-            return await UserModel.findById(id);
-        } catch (error) {
-            throw new Error(error);
-        }
+        return await UserModel.findById(id);
     }
 
     async getByEmail(email) {
-        try {
-            return await UserModel.findOne({ email: email })
-        } catch (error) {
-            throw new Error(error);
-        }
+        return await UserModel.findOne({ email: email })
     }
 
     async update(id, obj) {
-        try {
-            return await UserModel.findByIdAndUpdate(id, obj, { new: true });
-        } catch (error) {
-            throw new Error(error);
-        }
+        return await UserModel.findByIdAndUpdate(id, obj, { new: true });
     }
 
 }
