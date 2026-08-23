@@ -8,138 +8,100 @@ const UserMng = new UserRepository();
 const AuditLogMng = new AuditLogRepository();
 
 export const createOrder = async (newOrder, userId = null) => {
-    try {
-        const order = await OrderMng.create(newOrder, userId);
-        return order; // devolver entidad, no formateo
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
-    }
+    const order = await OrderMng.create(newOrder, userId);
+    return order; // devolver entidad, no formateo
 }
 
 export const getOrderById = async (orderId, userId) => {
-    try {
-        const order = await OrderMng.getById(orderId);
-        if (!order) return null;
+    const order = await OrderMng.getById(orderId);
+    if (!order) return null;
 
-        const user = await UserMng.getById(userId);
+    const user = await UserMng.getById(userId);
 
-        if (user.role !== "admin") {
-            if (order.userId?.toString() !== userId) return null;
-            if (order.deletedAt !== null) return null;
-        }
-        return order;
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
+    if (user.role !== "admin") {
+        if (order.userId?.toString() !== userId) return null;
+        if (order.deletedAt !== null) return null;
     }
+    return order;
 }
 
 export const getOrders = async (userId, page = 1, limit = 10, sort = "-timestamp") => {
-    try {
-        const orders = await OrderMng.getByUserId(userId, page, limit, sort);
-        return orders;
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
-    }
+    const orders = await OrderMng.getByUserId(userId, page, limit, sort);
+    return orders;
 }
 
 export const getAllOrders = async (page = 1, limit = 10, sort = "-timestamp", status) => {
-    try {
-        const orders = await OrderMng.getAll(page, limit, sort, status);
-        return orders;
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
-    }
+    const orders = await OrderMng.getAll(page, limit, sort, status);
+    return orders;
 }
 
 export const cancelOrder = async (orderId, userId) => {
-    try {
-        const order = await OrderMng.getById(orderId);
-        const user = await UserMng.getById(userId);
+    const order = await OrderMng.getById(orderId);
+    const user = await UserMng.getById(userId);
 
-        if (!order) return null;
+    if (!order) return null;
 
-        // Admin o usuario de la orden pueden cancelarla
-        if (user.role !== "admin") {
-            if (order.userId?.toString() !== userId) return null;
-            if (order.deletedAt !== null) return null;
-        }
-
-        if (order.status !== 'pending') {
-            if (order.status === 'cancelled') {
-                return order;
-            }
-            throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
-        }
-
-        await OrderMng.update(orderId, {
-            status: 'cancelled'
-        });
-
-        return order;
-
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
+    // Admin o usuario de la orden pueden cancelarla
+    if (user.role !== "admin") {
+        if (order.userId?.toString() !== userId) return null;
+        if (order.deletedAt !== null) return null;
     }
+
+    if (order.status !== 'pending') {
+        if (order.status === 'cancelled') {
+            return order;
+        }
+        throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
+    }
+
+    await OrderMng.update(orderId, {
+        status: 'cancelled'
+    });
+
+    return order;
 }
 
 export const deleteOrder = async (orderId, userId, reason) => {
-    try {
-        const order = await OrderMng.getById(orderId);
+    const order = await OrderMng.getById(orderId);
 
-        if (!order) return null;
+    if (!order) return null;
 
-        if (order.deletedAt) {
-            return order;
-        }
-
-        const log = {
-            entity: 'order',
-            entityId: order._id,
-            action: "SOFT_DELETE",
-            from: order.status,
-            to: "SOFT_DELETE",
-            reason
-        }
-
-        await AuditLogMng.create(log, userId);
-
-        await OrderMng.update(orderId, {
-            deletedAt: Date.now()
-        });
-
+    if (order.deletedAt) {
         return order;
-
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
     }
+
+    const log = {
+        entity: 'order',
+        entityId: order._id,
+        action: "SOFT_DELETE",
+        from: order.status,
+        to: "SOFT_DELETE",
+        reason
+    }
+
+    await AuditLogMng.create(log, userId);
+
+    await OrderMng.update(orderId, {
+        deletedAt: Date.now()
+    });
+
+    return order;
 }
 
 export const confirmOrder = async (orderId) => {
-    try {
-        const order = await OrderMng.getById(orderId);
+    const order = await OrderMng.getById(orderId);
 
-        if (!order) return null;
-        if (order.deletedAt) return null;
+    if (!order) return null;
+    if (order.deletedAt) return null;
 
-        if (order.status !== 'pending') {
-            if (order.status === 'confirmed') return order;
-            throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
-        }
-
-        const updatedOrder = await OrderMng.update(orderId, {
-            status: 'confirmed'
-        });
-
-        return updatedOrder;
-
-    } catch (error) {
-        console.error('[OrderService]', error);
-        throw error;
+    if (order.status !== 'pending') {
+        if (order.status === 'confirmed') return order;
+        throw new AppError("Solo se pueden confirmar órdenes pendientes", 400);
     }
+
+    const updatedOrder = await OrderMng.update(orderId, {
+        status: 'confirmed'
+    });
+
+    return updatedOrder;
 }

@@ -11,7 +11,7 @@ const transporter = createTransport({
     }
 });
 
-const createMsgRegister = name => 
+const createMsgRegister = name =>
     `<div style="font-family: Arial">
       <h1>Hola ${name}, ¡Bienvenido/a al Ecomerce!</h1>
         <img 
@@ -31,7 +31,7 @@ const createMsgLastConnection = name =>
         />
       </div>`;
 
-const createMsgLogin = (name, code) => 
+const createMsgLogin = (name, code) =>
     `<div style="font-family: Arial">
       <p>Hola ${name}, este es su código para inicio de sesión ${code}.<br><br>El mismo expira en 5 minutos.</p>
         <img 
@@ -42,33 +42,28 @@ const createMsgLogin = (name, code) =>
       </div>`;
 
 export const sendMail = async (user, service, code = 0) => {
-    try {
-        const { name, email } = user;
-        let msg = '';
-        let subj = '';
-        
-        if (service === 'register') {
-            msg = createMsgRegister(name)
-            subj = 'Bienvenido/a'
-        } else if (service === 'lastConnection') {
-            msg = createMsgLastConnection(name)
-            subj = 'Cuenta desactivada por inactividad'
-        } else if (service === 'login') {
-            msg = createMsgLogin(name, code)
-            subj = `Codigo para inicio de sesión ${code}`
-        }
-        
-        const gmailOptions = {
-            from: config.EMAIL,
-            to: email,
-            subject: subj,
-            html: msg
-        };
+    const { name, email } = user;
+    let msg = '';
+    let subj = '';
 
-        await transporter.sendMail(gmailOptions);
-        console.log(`Email enviado ${code}`);
-
-    } catch (error) {
-        throw new Error(error)
+    if (service === 'register') {
+        msg = createMsgRegister(name)
+        subj = 'Bienvenido/a'
+    } else if (service === 'lastConnection') {
+        msg = createMsgLastConnection(name)
+        subj = 'Cuenta desactivada por inactividad'
+    } else if (service === 'login') {
+        msg = createMsgLogin(name, code)
+        subj = `Codigo para inicio de sesión ${code}`
     }
+
+    const gmailOptions = {
+        from: config.EMAIL,
+        to: email,
+        subject: subj,
+        html: msg
+    };
+
+    await transporter.sendMail(gmailOptions);
+    console.log(`Email enviado ${code}`);
 }
