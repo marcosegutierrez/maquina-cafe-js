@@ -1,5 +1,5 @@
 export const errorHandler = (err, req, res, next) => {
-    // console.log('Error: ', err);
+    console.log('Error: ', err);
     const isOperational = err.isOperational;
     const status = err.statusCode || 500;
 

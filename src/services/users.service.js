@@ -55,6 +55,8 @@ export const login = async (email) => {
 export const loginValidator = async (email, access_code) => {
     const userExist = await UserMng.getByEmail(email);
 
+    if (!userExist) throw new AppError('El código o usuario no coincide', 401);
+
     resetAttemptsIfExpired(userExist);
     await userExist.save();
 
@@ -75,9 +77,7 @@ export const loginValidator = async (email, access_code) => {
         throw new AppError('Código expirado', 401);
     }
 
-    if (!userExist) {
-        throw new AppError('El código o usuario no coincide', 401);
-    } else if (userExist.code !== Number(access_code)) {
+    if (userExist.code !== Number(access_code)) {
         await userExist.registerCodeAttempt();
         throw new AppError('El código o usuario no coincide', 401);
     }
