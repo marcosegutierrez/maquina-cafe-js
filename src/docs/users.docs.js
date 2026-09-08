@@ -198,7 +198,7 @@ export const usersDocs = {
       post: {
         summary: "Validar código de acceso",
         description:
-          "Valida el código enviado al email del usuario para completar el proceso de login. Requiere que el usuario haya iniciado previamente el proceso en /login, donde se almacena el email en sesión. Incluye protección contra múltiples intentos fallidos.",
+          "Valida el código enviado al email del usuario para completar el proceso de login. Requiere que el usuario haya iniciado previamente el proceso en /login, donde se almacena el email en sesión. Incluye protección contra múltiples intentos fallidos, tanto desde una sesión como contra una cuenta.",
         tags: ["Users"],
         requestBody: {
           required: true,
