@@ -1,8 +1,8 @@
 import * as services from "../services/users.service.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../utils/errors.js";
-import { LOGIN_SECURITY } from "../config.js";
 import { serializeUser } from "../serializers/user.serializer.js";
+import { registerSessionLoginAttempt } from "./helpers/loginAttempts.helper.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -67,10 +67,8 @@ export const loginValidator = async (req, res, next) => {
 
     } catch (error) {
 
-        req.session.loginAttempts = (req.session.loginAttempts || 0) + 1;
-
-        if (req.session.loginAttempts >= LOGIN_SECURITY.CODE_ATTEMPTS) {
-            req.session.blockedUntil = Date.now() + LOGIN_SECURITY.BLOCK_TIME_MS;
+        if (error.countAsLoginAttempt) {
+            registerSessionLoginAttempt(req.session);
         }
 
         next(error);
@@ -102,7 +100,7 @@ export const logout = async (req, res, next) => {
             });
         }
 
-        req.session.destroy( err => {
+        req.session.destroy(err => {
             if (err) return next(err);
 
             res.clearCookie('connect.sid');
