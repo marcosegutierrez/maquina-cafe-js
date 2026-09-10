@@ -3,7 +3,7 @@ import { sendMail } from "./mailing.service.js";
 import { generateCodeValidator } from "../utils.js";
 import { AppError } from "../utils/errors.js";
 import { LOGIN_SECURITY } from "../config.js";
-import { resetAttemptsIfExpired } from "./helpers/authAttempts.helper.js";
+import { checkAndInitializeCodeAttempts } from "./helpers/authAttempts.helper.js";
 
 const UserMng = new UserRepository();
 
@@ -61,12 +61,8 @@ export const loginValidator = async (email, access_code) => {
         { countAsLoginAttempt: true }
     );
 
-    resetAttemptsIfExpired(userExist);
+    checkAndInitializeCodeAttempts(userExist);
     await userExist.save();
-
-    if (!userExist.codeAttemptsAt) {
-        await UserMng.update(userExist.id, { codeAttemptsAt: new Date() });
-    }
 
     if (userExist.lockUntil) {
         if (userExist.lockUntil > Date.now()) {
