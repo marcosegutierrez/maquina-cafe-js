@@ -16,7 +16,6 @@ const OrderSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: "user",
-        // required: true
     },
     status: {
         type: String,
@@ -38,7 +37,6 @@ OrderSchema.virtual('timestampFormatted').get(function () {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        //second: '2-digit',
         hour12: false
     }).replace(',', '').replaceAll('/', '-') + ' hs';
 });
