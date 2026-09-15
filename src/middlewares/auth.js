@@ -22,20 +22,14 @@ export const requireAuth = (req, res, next) => {
 
 export const requireAdmin = async (req, res, next) => {
     try {
-        if (!req.session?.userId) {
-            return res.status(401).json({
-                success: false,
-                message: "No autenticado"
-            });
-        }
-
         const user = await UserMng.getById(req.session.userId);
 
-        if (!user || user.role !== "admin") {
-            return res.status(403).json({
-                success: false,
-                message: "No autorizado"
-            });
+        if (!user) {
+            throw new AppError("Usuario no encontrado", 401);
+        }
+
+        if (user.role !== "admin") {
+            throw new AppError('No autorizado', 403);
         }
 
         next();

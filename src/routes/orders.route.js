@@ -13,16 +13,16 @@ router.post('/', userRateLimiter, controllers.createOrder);
 router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
 
 //Traer todas las ordenes (Admin)
-router.get('/all', requireAdmin, controllers.getAllOrders);
+router.get('/all', requireAuth, requireAdmin, controllers.getAllOrders);
 
 //Confirmación de orden
-router.patch('/:id/confirm', validateObjectId(), requireAdmin, controllers.confirmOrder);
+router.patch('/:id/confirm', validateObjectId(), requireAuth, requireAdmin, controllers.confirmOrder);
 
 //Cancela orden
 router.patch('/:id/cancel', validateObjectId(), requireAuth, userRateLimiter, controllers.cancelOrder);
 
 //Eliminado lógico de orden
-router.delete('/:id', validateObjectId(), requireAdmin, userRateLimiter, controllers.deleteOrder);
+router.delete('/:id', validateObjectId(), requireAuth, requireAdmin, userRateLimiter, controllers.deleteOrder);
 
 //Trae orden por id
 router.get('/:id', validateObjectId(), requireAuth, userRateLimiter, controllers.getOrderById);
