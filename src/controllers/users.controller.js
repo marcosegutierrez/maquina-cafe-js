@@ -6,6 +6,12 @@ import { registerSessionLoginAttempt } from "./helpers/loginAttempts.helper.js";
 
 export const register = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()) {
+            throw new AppError('Datos de registro inválidos', 400)
+        }
+
         const user = await services.register(req.body);
 
         return res.status(201).json({

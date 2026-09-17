@@ -8,14 +8,18 @@ import { checkAndInitializeCodeAttempts } from "./helpers/authAttempts.helper.js
 const UserMng = new UserRepository();
 
 export const register = async (data) => {
-    const { email } = data;
+    const { email, name, nickname } = data;
     const userExist = await UserMng.getByEmail(email);
 
     if (userExist) {
         throw new AppError('Este usuario ya se encuentra registrado', 409);
     }
 
-    const user = await UserMng.create(data);
+    const user = await UserMng.create({
+        email,
+        name, 
+        nickname
+    });
 
     await sendMail(user, 'register');
 
