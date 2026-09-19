@@ -1,10 +1,18 @@
 import * as services from "../services/orders.service.js";
 import { serializeOrder } from "../serializers/order.serializer.js";
+import { validationResult } from "express-validator";
+import { AppError } from "../utils/errors.js";
 
 export const createOrder = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            throw new AppError('Datos de orden inválidos', 400);
+        }
+
         let order;
-        if ( req.session.userId ) {
+        if (req.session.userId) {
             order = await services.createOrder(req.body, req.session.userId);
         } else {
             order = await services.createOrder(req.body); // Invitado
@@ -22,18 +30,18 @@ export const createOrder = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
     try {
         const userId = req.session.userId;
-        const {page, limit, sort} = req.query;
+        const { page, limit, sort } = req.query;
         const userOrders = await services.getOrders(userId, page, limit, sort);
 
         const serializedOrders = {
             ...userOrders,
             data: userOrders.data.map(order => serializeOrder(order))
         };
-        
+
         return res.status(200).json({
             success: true,
             orders: serializedOrders
-        });        
+        });
     } catch (error) {
         next(error);
     }
@@ -41,7 +49,7 @@ export const getOrders = async (req, res, next) => {
 
 export const getAllOrders = async (req, res, next) => {
     try {
-        const {page, limit, sort, status} = req.query;
+        const { page, limit, sort, status } = req.query;
         const orders = await services.getAllOrders(page, limit, sort, status);
 
         const serializedOrders = {
@@ -52,7 +60,7 @@ export const getAllOrders = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             orders: serializedOrders
-        }); 
+        });
 
     } catch (error) {
         next(error);
@@ -64,12 +72,12 @@ export const getOrderById = async (req, res, next) => {
         const { id } = req.params;
         const { userId } = req.session;
         const order = await services.getOrderById(id, userId);
-        if ( !order ) {
+        if (!order) {
             return res.status(404).json({
                 status: false,
                 message: "Orden no encontrada o no disponible"
             });
-        } 
+        }
         return res.status(200).json({
             success: true,
             order: serializeOrder(order)
@@ -84,7 +92,7 @@ export const cancelOrder = async (req, res, next) => {
         const orderId = req.params.id;
         const userId = req.session.userId;
         const order = await services.cancelOrder(orderId, userId);
-        if ( order === null ) {
+        if (order === null) {
             return res.status(404).json({
                 success: false,
                 message: "Orden no encontrada o no disponible"
@@ -104,8 +112,8 @@ export const deleteOrder = async (req, res, next) => {
         const orderId = req.params.id;
         const userId = req.session.userId;
         const order = await services.deleteOrder(orderId, userId, req.body.reason);
-        
-        if ( order === null ) {
+
+        if (order === null) {
             return res.status(404).json({
                 success: false,
                 message: "Orden no encontrada o no disponible"
@@ -125,8 +133,8 @@ export const confirmOrder = async (req, res, next) => {
     try {
         const orderId = req.params.id;
         const order = await services.confirmOrder(orderId);
-        
-        if ( order === null ) {
+
+        if (order === null) {
             return res.status(404).json({
                 success: false,
                 message: "Orden no encontrada o no disponible"

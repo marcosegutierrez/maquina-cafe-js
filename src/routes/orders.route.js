@@ -3,11 +3,12 @@ import { requireAdmin, requireAuth } from "../middlewares/auth.js";
 import * as controllers from "../controllers/orders.controller.js";
 import { userRateLimiter } from "../middlewares/rateLimit.js";
 import { validateObjectId } from "../middlewares/validateObjectId.js";
+import { createOrderValidator } from "../validators/order.validators.js";
 
 const router = Router();
 
 //Crea una orden
-router.post('/', userRateLimiter, controllers.createOrder);
+router.post('/', userRateLimiter, createOrderValidator, controllers.createOrder);
 
 //Trae las ordenes de usuario logeado
 router.get('/', requireAuth, userRateLimiter, controllers.getOrders);
