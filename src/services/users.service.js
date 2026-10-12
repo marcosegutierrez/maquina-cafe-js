@@ -3,7 +3,7 @@ import { sendMail } from "./mailing.service.js";
 import { generateCodeValidator } from "../utils.js";
 import { AppError } from "../utils/errors.js";
 import { LOGIN_SECURITY } from "../config.js";
-import { checkAndInitializeCodeAttempts } from "./helpers/authAttempts.helper.js";
+import { checkAndInitializeCodeAttempts, resetAttemptsIfExpired } from "./helpers/authAttempts.helper.js";
 
 const UserMng = new UserRepository();
 

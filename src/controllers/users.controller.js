@@ -1,5 +1,4 @@
 import * as services from "../services/users.service.js";
-import { validationResult } from "express-validator";
 import { AppError } from "../utils/errors.js";
 import { serializeUser } from "../serializers/user.serializer.js";
 import { registerSessionLoginAttempt } from "./helpers/loginAttempts.helper.js";
@@ -21,12 +20,6 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            throw new AppError('Email inválido', 400);
-        }
-
         const { email } = req.body;
         await services.login(email);
 
