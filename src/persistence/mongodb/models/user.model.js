@@ -51,6 +51,7 @@ UserSchema.methods.registerMailAttempt = function() {
     if (this.lockUntil && this.lockUntil < Date.now()) {
         this.lockUntil = null;
         this.mailAttempts = 0;
+        this.codeAttempts = 0;
     }
     this.mailAttempts++;
     if (this.mailAttempts >= LOGIN_SECURITY.MAIL_ATTEMPTS) {

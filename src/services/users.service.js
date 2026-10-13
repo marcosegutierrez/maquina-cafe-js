@@ -17,7 +17,7 @@ export const register = async (data) => {
 
     const user = await UserMng.create({
         email,
-        name, 
+        name,
         nickname
     });
 
@@ -65,15 +65,19 @@ export const loginValidator = async (email, access_code) => {
         { countAsLoginAttempt: true }
     );
 
-    checkAndInitializeCodeAttempts(userExist);
+    await checkAndInitializeCodeAttempts(userExist);
     await userExist.save();
 
     if (userExist.lockUntil) {
         if (userExist.lockUntil > Date.now()) {
             throw new AppError('Demasiados intentos fallidos. Intente más tarde.', 423);
-        } else if (userExist.lockUntil <= Date.now()) {
-            await UserMng.update(userExist._id, { codeAttempts: 0, lockUntil: null });
         }
+
+        // El bloqueo venció: reiniciar el contador de la cuenta.
+        userExist.codeAttempts = 0;
+        userExist.lockUntil = null;
+
+        await userExist.save();
     }
 
     if (Date.now() > userExist.codeExpiresAt) {
