@@ -5,6 +5,9 @@ export const createOrderValidator = [
     body('drink')
         .isString()
         .withMessage('La bebida debe ser un texto')
+        .notEmpty()
+        .withMessage('La bebida no puede estar vacía')
+        .bail()
         .customSanitizer(normalizeDrink)
         .isIn(DRINKS)
         .withMessage('Bebida inválida'),

@@ -4,11 +4,12 @@ import * as controllers from "../controllers/orders.controller.js";
 import { userRateLimiter } from "../middlewares/rateLimit.js";
 import { validateObjectId } from "../middlewares/validateObjectId.js";
 import { createOrderValidator } from "../validators/order.validators.js";
+import { validateRequest } from "../middlewares/validateRequest.js";
 
 const router = Router();
 
 //Crea una orden
-router.post('/', userRateLimiter, createOrderValidator, controllers.createOrder);
+router.post('/', userRateLimiter, createOrderValidator, validateRequest, controllers.createOrder);
 
 //Trae las ordenes de usuario logeado
 router.get('/', requireAuth, userRateLimiter, controllers.getOrders);

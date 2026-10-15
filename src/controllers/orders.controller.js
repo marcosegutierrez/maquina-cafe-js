@@ -1,16 +1,8 @@
 import * as services from "../services/orders.service.js";
 import { serializeOrder } from "../serializers/order.serializer.js";
-import { validationResult } from "express-validator";
-import { AppError } from "../utils/errors.js";
 
 export const createOrder = async (req, res, next) => {
     try {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            throw new AppError('Datos de orden inválidos', 400);
-        }
-
         let order;
         if (req.session.userId) {
             order = await services.createOrder(req.body, req.session.userId);
