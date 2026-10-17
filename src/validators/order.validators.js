@@ -20,3 +20,16 @@ export const createOrderValidator = [
         )
         .withMessage('El azúcar debe ser un número entero no negativo')
 ];
+
+export const deleteOrderValidator = [
+    body('reason')
+        .isString()
+        .withMessage('El motivo debe ser un texto')
+        .bail()
+        .trim()
+        .notEmpty()
+        .withMessage('El motivo no puede estar vacío')
+        .bail()
+        .isLength({ max: 250 })
+        .withMessage('El motivo no puede superar los 250 caracteres')
+];
