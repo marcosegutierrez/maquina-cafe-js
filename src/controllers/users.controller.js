@@ -2,6 +2,7 @@ import * as services from "../services/users.service.js";
 import { AppError } from "../utils/errors.js";
 import { serializeUser } from "../serializers/user.serializer.js";
 import { registerSessionLoginAttempt } from "./helpers/loginAttempts.helper.js";
+import { destroySession } from "../utils/session.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -93,16 +94,15 @@ export const logout = async (req, res, next) => {
             });
         }
 
-        req.session.destroy(err => {
-            if (err) return next(err);
+        await destroySession(req);
+        res.clearCookie("connect.sid");
 
-            res.clearCookie('connect.sid');
-            return res.status(200).json({
-                success: true,
-                message: 'Sesión cerrada correctamente'
-            });
+        return res.status(200).json({
+            success: true,
+            message: 'Sesión cerrada correctamente'
         });
+
     } catch (error) {
-        next(error);
+        return next(error);
     }
 }
