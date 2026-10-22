@@ -37,14 +37,14 @@ export const getAllOrders = async (page = 1, limit = 10, sort = "-timestamp", st
 
 export const cancelOrder = async (orderId, userId) => {
     const order = await OrderMng.getById(orderId);
-    const user = await UserMng.getById(userId);
 
-    if (!order) return null;
+    if (!order || order.deletedAt) return null;
+
+    const user = await UserMng.getById(userId);
 
     // Admin o usuario de la orden pueden cancelarla
     if (user.role !== "admin") {
         if (order.userId?.toString() !== userId) return null;
-        if (order.deletedAt !== null) return null;
     }
 
     if (order.status !== 'pending') {
@@ -91,8 +91,7 @@ export const deleteOrder = async (orderId, userId, reason) => {
 export const confirmOrder = async (orderId) => {
     const order = await OrderMng.getById(orderId);
 
-    if (!order) return null;
-    if (order.deletedAt) return null;
+    if (!order || order.deletedAt) return null;
 
     if (order.status !== 'pending') {
         if (order.status === 'confirmed') return order;
