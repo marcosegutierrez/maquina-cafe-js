@@ -54,11 +54,11 @@ export const cancelOrder = async (orderId, userId) => {
         throw new AppError("Solo se pueden cancelar órdenes pendientes", 400);
     }
 
-    await OrderMng.update(orderId, {
+    const updatedOrder = await OrderMng.update(orderId, {
         status: 'cancelled'
     });
 
-    return order;
+    return updatedOrder;
 }
 
 export const deleteOrder = async (orderId, userId, reason) => {
