@@ -81,11 +81,11 @@ export const deleteOrder = async (orderId, userId, reason) => {
 
     await AuditLogMng.create(log, userId);
 
-    await OrderMng.update(orderId, {
+    const updatedOrder = await OrderMng.update(orderId, {
         deletedAt: Date.now()
     });
 
-    return order;
+    return updatedOrder;
 }
 
 export const confirmOrder = async (orderId) => {
