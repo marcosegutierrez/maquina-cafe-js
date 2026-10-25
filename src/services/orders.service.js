@@ -2,6 +2,7 @@ import OrderRepository from "../persistence/mongodb/repositories/order.repositor
 import UserRepository from "../persistence/mongodb/repositories/user.repository.js";
 import AuditLogRepository from "../persistence/mongodb/repositories/auditLog.repository.js";
 import { AppError } from "../utils/errors.js";
+import mongoose from "mongoose";
 
 const OrderMng = new OrderRepository();
 const UserMng = new UserRepository();
@@ -61,32 +62,50 @@ export const cancelOrder = async (orderId, userId) => {
     return updatedOrder;
 }
 
+
 export const deleteOrder = async (orderId, userId, reason) => {
-    const order = await OrderMng.getById(orderId);
+    const session = await mongoose.startSession();
 
-    if (!order) return null;
+    try {
+        let result = null;
 
-    if (order.deletedAt) {
-        return order;
+        await session.withTransaction(async () => {
+            const order = await OrderMng.getById(orderId, { session });
+
+            if (!order) {
+                result = null;
+                return;
+            }
+
+            if (order.deletedAt) {
+                result = order;
+                return;
+            }
+
+            const log = {
+                entity: 'order',
+                entityId: order._id,
+                action: "SOFT_DELETE",
+                from: order.status,
+                to: "SOFT_DELETE",
+                reason
+            };
+
+            await AuditLogMng.create(log, userId, { session });
+
+            result = await OrderMng.update(
+                orderId,
+                { deletedAt: Date.now() },
+                { session }
+            );
+        });
+
+        return result;
+    } finally {
+        await session.endSession();
     }
+};
 
-    const log = {
-        entity: 'order',
-        entityId: order._id,
-        action: "SOFT_DELETE",
-        from: order.status,
-        to: "SOFT_DELETE",
-        reason
-    }
-
-    await AuditLogMng.create(log, userId);
-
-    const updatedOrder = await OrderMng.update(orderId, {
-        deletedAt: Date.now()
-    });
-
-    return updatedOrder;
-}
 
 export const confirmOrder = async (orderId) => {
     const order = await OrderMng.getById(orderId);

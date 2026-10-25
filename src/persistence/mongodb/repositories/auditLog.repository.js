@@ -2,7 +2,7 @@ import { AuditLogModel } from "../models/auditLog.model.js";
 
 export default class AuditLogRepository {
 
-    async create(log, userId) {
+    async create(log, userId, { session } = {}) {
         const obj = {
             entity: log.entity,
             entityId: log.entityId,
@@ -12,7 +12,10 @@ export default class AuditLogRepository {
             performedBy: userId,
             reason: log.reason
         }
-        return await AuditLogModel.create(obj);
+
+        const auditLog = new AuditLogModel(obj);
+
+        return await auditLog.save({ session });
     }
 
     async getAll(page, limit, sort) {

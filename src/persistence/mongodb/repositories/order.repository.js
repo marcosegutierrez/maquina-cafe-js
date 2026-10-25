@@ -40,8 +40,8 @@ export default class OrderRepository {
         return orders;
     }
 
-    async getById(id) {
-        return await OrderModel.findById(id);
+    async getById(id, { session } = {}) {
+        return await OrderModel.findById(id).session(session ?? null);
     }
 
     async getByUserId(userId, page, limit, sort) {
@@ -81,8 +81,8 @@ export default class OrderRepository {
         return await OrderModel.create(obj);
     }
 
-    async update(id, obj) {
-        return await OrderModel.findByIdAndUpdate(id, obj, { new: true });
+    async update(id, obj, { session } = {}) {
+        return await OrderModel.findByIdAndUpdate(id, obj, { new: true, session });
     }
 
     async delete(id) {
