@@ -4,20 +4,12 @@ import { AppError } from "../../../utils/errors.js"
 export default class OrderRepository {
 
     async getAll(page, limit, sort, status) {
-        const allowedStatus = ["pending", "confirmed", "cancelled"]
-
         page = Number(page);
         limit = Number(limit);
 
         const query = {};
 
-        if (status) {
-            if (!allowedStatus.includes(status)) {
-                throw new AppError("Estado inválido", 400);
-            }
-
-            query.status = status;
-        }
+        if (status) query.status = status;
 
         if (limit < 1) limit = 10;
 
